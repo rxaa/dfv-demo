@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "amd",
+    "target": "es5",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "outFile": "../public/js/all.js",
+    "lib": [
+      "dom",
+      "es2015.promise",
+      "es5"
+    ],
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noImplicitReturns": true,
+    "sourceMap": false,
+    "watch": true,
+    "jsx": "react"
+  }
+}

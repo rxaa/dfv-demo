@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/ced2d7864b0feebe83b35d6177a9a23821d6485b/http-assert/index.d.ts",
+    "raw": "registry:dt/http-assert#1.2.0+20170106161739",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/ced2d7864b0feebe83b35d6177a9a23821d6485b/http-assert/index.d.ts"
+  }
+}

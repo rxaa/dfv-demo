@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/e37fc19ad42a8f945696ea2e1b76a981a492ea2e/koa-compose/index.d.ts",
+    "raw": "registry:dt/koa-compose#3.2.0+20170322174332",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/e37fc19ad42a8f945696ea2e1b76a981a492ea2e/koa-compose/index.d.ts"
+  }
+}

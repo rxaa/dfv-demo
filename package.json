@@ -1,0 +1,35 @@
+{
+  "name": "dfv-demo",
+  "version": "0.1.0",
+  "description": "dfv with express demo",
+  "main": "http.js",
+  "author": {
+    "name": "rxaa",
+    "email": "zyxdde@gmail.com"
+  },
+  "dependencies": {
+    "agentkeepalive": "^2.2.0",
+    "body-parser": "^1.17.2",
+    "chokidar": "^1.7.0",
+    "compression": "^1.6.2",
+    "cookie-parser": "^1.4.3",
+    "dfv": "^0.1.5",
+    "express": "^4.15.3",
+    "formidable": "^1.0.17",
+    "method-override": "^2.3.9",
+    "mongodb": "^2.2.29",
+    "morgan": "^1.8.2",
+    "mysql": "^2.13.0",
+    "socket.io": "^1.7.4",
+    "socket.io-client": "^1.7.4",
+    "source-map-support": "^0.4.15"
+  },
+  "engines": {
+    "node": ">= 6.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rxaa/dfv-demo.git"
+  },
+  "license": "MIT"
+}

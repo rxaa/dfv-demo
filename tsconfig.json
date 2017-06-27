@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+//    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noImplicitReturns": true,
+    "pretty": true,
+    "watch": true,
+    "allowJs": true,
+    "jsx": "react"
+  },
+  "exclude": [
+    //    "public",
+    "node_modules",
+    "front",
+    "runtime"
+  ]
+}
