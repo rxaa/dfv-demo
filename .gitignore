@@ -1,3 +1,4 @@
 /node_modules
 /.idea
 *.js.map
+/public/js/all.js
