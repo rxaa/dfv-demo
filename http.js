@@ -18,9 +18,12 @@ const methodOverride = require("method-override");
 const compression = require("compression");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const cfg = require("./config/config");
+const mysqlModel_1 = require("./config/template/mysqlModel");
+if (!cfg.isProduction) {
+    mysqlModel_1.mysqlModel.generate();
+}
 var app = express();
-//app.set('views', path.join(__dirname, 'views'));
-//app.set('view engine', 'jade');
 //日志 Config.enableHTML ? 'short' : 'combined'
 app.use(morgan('short', {
     stream: {
@@ -46,6 +49,9 @@ app.use(cookieParser("dsqikmnfhtlp"));
 process.on('unhandledRejection', function (error, promise) {
     dfv_1.dfvLog.write("unhandled Rejection:", error);
 });
+/**
+ * 加载controllers
+ */
 dfv_1.route.load(app, [{
         menu: path.join(__dirname, 'controllers', 'web'),
         onRoute: (dat) => __awaiter(this, void 0, void 0, function* () {
@@ -68,7 +74,13 @@ dfv_1.route.load(app, [{
             }
         })
     }]);
+/**
+ * 静态文件目录
+ */
 app.use(express.static(path.join(__dirname, 'public')));
+/**
+ * 404
+ */
 app.use(function responser(req, resp, next) {
     resp.status(404);
     resp.end('404, Page Not Found!');
@@ -80,17 +92,16 @@ function errorHandler(err, req, res, next) {
     res.end("网络异常");
 }
 app.use(errorHandler);
-http.createServer(app).listen(5000, () => {
-    console.log('express server listening on port 5000');
+http.createServer(app).listen(cfg.httpPort, () => {
+    console.log('express server listening on port ' + cfg.httpPort);
 }).on('connection', function (socket) {
     //console.log("A new connection was made by a client.");
     socket.setTimeout(5 * 60 * 1000);
 });
 //启动https服务
-// var options = {
+// var options:https.ServerOptions = {
 //     key: fs.readFileSync(__dirname + '/configExt/keys/server.key'),
-//     cert: fs.readFileSync(__dirname + '/configExt/keys/server.crt'),
-//     ca: fs.readFileSync(__dirname + '/configExt/keys/1_root_bundle.crt'),
+//     cert: fs.readFileSync(__dirname + '/configExt/keys/server.pem'),
 // };
 //
 // https.createServer(options, app).listen(Config.rpcServer.portHttps, function () {

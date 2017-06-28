@@ -1,8 +1,16 @@
+/// @ts-check
+
 /**
  * 是否为正式环境
  * @type {boolean}
  */
 exports.isProduction = true;
+
+/**
+ * http启动端口
+ * @type {number}
+ */
+exports.httpPort = 80;
 
 /**
  * mysql配置文件
@@ -19,13 +27,13 @@ exports.mysql = {
     sqlErrorLog: true,
 
     //查询语句日志
-    sqlQueryLog: false,
+    // sqlQueryLog: true,
 
     //查询结果日志
     // sqlQueryResultLog: true,
 
     //更新语句日志
-    sqlUpdateLog: false,
+    // sqlUpdateLog: true,
 
     //慢查询时间（毫秒）
     sqlSlowLog: 500,

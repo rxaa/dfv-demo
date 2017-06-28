@@ -8,6 +8,7 @@ export class HomeController {
 
     @route.get("/")
     async index() {
+
         return viewHome.index();
     }
 

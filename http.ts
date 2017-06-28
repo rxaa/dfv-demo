@@ -12,11 +12,15 @@ import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
 import * as path from "path";
 import * as cfg from "./config/config";
+import {mysqlModel} from "./config/template/mysqlModel";
+
+
+if (!cfg.isProduction) {
+    mysqlModel.generate();
+}
+
 
 var app = express();
-
-//app.set('views', path.join(__dirname, 'views'));
-//app.set('view engine', 'jade');
 
 //日志 Config.enableHTML ? 'short' : 'combined'
 app.use(morgan('short', {
@@ -49,6 +53,9 @@ process.on('unhandledRejection', function (error, promise) {
     dfvLog.write("unhandled Rejection:", error);
 });
 
+/**
+ * 加载controllers
+ */
 route.load(app, [{
     menu: path.join(__dirname, 'controllers', 'web'),
     onRoute: async (dat) => {
@@ -73,9 +80,15 @@ route.load(app, [{
 }]);
 
 
+/**
+ * 静态文件目录
+ */
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+/**
+ * 404
+ */
 app.use(function responser(req: express.Request, resp: express.Response, next: () => void) {
     resp.status(404);
     resp.end('404, Page Not Found!');
@@ -90,18 +103,17 @@ function errorHandler(err, req: express.Request, res: express.Response, next: Fu
 }
 app.use(errorHandler);
 
-http.createServer(app).listen(5000, () => {
-    console.log('express server listening on port 5000');
+http.createServer(app).listen(cfg.httpPort, () => {
+    console.log('express server listening on port ' + cfg.httpPort);
 }).on('connection', function (socket: net.Socket) {
     //console.log("A new connection was made by a client.");
     socket.setTimeout(5 * 60 * 1000);
 });
 
 //启动https服务
-// var options = {
+// var options:https.ServerOptions = {
 //     key: fs.readFileSync(__dirname + '/configExt/keys/server.key'),
-//     cert: fs.readFileSync(__dirname + '/configExt/keys/server.crt'),
-//     ca: fs.readFileSync(__dirname + '/configExt/keys/1_root_bundle.crt'),
+//     cert: fs.readFileSync(__dirname + '/configExt/keys/server.pem'),
 // };
 //
 // https.createServer(options, app).listen(Config.rpcServer.portHttps, function () {
