@@ -1,0 +1,15 @@
+{
+  "apps": [
+    {
+      "name": "app",
+      "script": "http.js",
+      "args": "production",
+      "watch": false,
+      "merge_logs": true,
+      "cwd": "/sc/ts/app",
+      "out_file": "/sc/ts/app/runtime/logs/out.log",
+      "error_file": "/sc/ts/app/runtime/logs/error.log",
+      "log_date_format": "YYYY-MM-DD HH:mm:ss "
+    }
+  ]
+}

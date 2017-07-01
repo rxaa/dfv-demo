@@ -1,48 +1,44 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const dfv_1 = require("dfv");
 dfv_1.dfvLib.init(__dirname);
 const http = require("http");
 const express = require("express");
-const morgan = require("morgan");
-const bodyParser = require("body-parser");
-const methodOverride = require("method-override");
-const compression = require("compression");
-const cookieParser = require("cookie-parser");
 const path = require("path");
 const cfg = require("./config/config");
 const mysqlModel_1 = require("./config/template/mysqlModel");
-if (!cfg.isProduction) {
+const Tasks_1 = require("./config/Tasks");
+const html_1 = require("./config/template/html");
+const RouteController_1 = require("./controllers/RouteController");
+//定时任务
+Tasks_1.Tasks.startAll();
+if (cfg.isProduction) {
+    dfv_1.dfvLog.enableConsole = false;
+}
+else {
     mysqlModel_1.mysqlModel.generate();
+    html_1.ApiDoc.generate(true);
 }
 var app = express();
 //日志 Config.enableHTML ? 'short' : 'combined'
-app.use(morgan('short', {
-    stream: {
-        write: function (str) {
-            dfv_1.dfvLog.write(str, null, dfv_1.dfvLog.getCutFile("access.log"));
-        }
-    },
-}));
-app.use(bodyParser.urlencoded({
-    extended: false
-}));
-app.use(bodyParser.json());
-app.use(methodOverride());
-//启用压缩
-app.use(compression());
+// app.use(morgan('short', {
+//     stream: {
+//         write: function (str) {
+//            // dfvLog.write(str, null, dfvLog.getCutFile("access.log"));
+//         }
+//     },
+// }));
+// app.use(bodyParser.urlencoded({
+//     extended: false
+// }));
+// app.use(bodyParser.json());
+// app.use(methodOverride());
+//
+// //启用压缩
+// app.use(compression());
 //
 //启用cookie
-app.use(cookieParser("dsqikmnfhtlp"));
-// app.use(app.router);
+// app.use(cookieParser("dsqikmnfhtlp"));
 /**
  * 未处理的Promise Rejection
  */
@@ -52,32 +48,23 @@ process.on('unhandledRejection', function (error, promise) {
 /**
  * 加载controllers
  */
-dfv_1.route.load(app, [{
+dfv_1.route.load(app, [
+    {
         menu: path.join(__dirname, 'controllers', 'web'),
-        onRoute: (dat) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                if (!dat.valid.ok) {
-                    //验证失败
-                    dfv_1.dfvLog.write(dat.router.url + " : " + JSON.stringify(dat.valid));
-                    dat.ctx.status = 500;
-                    dat.ctx.body = dat.valid.msg;
-                    return;
-                }
-                let ret = yield dat.router.next(dat);
-                if (ret != null)
-                    dat.ctx.body = ret;
-            }
-            catch (e) {
-                dfv_1.dfvLog.write(dat.router.url + " : " + JSON.stringify(dat.valid), e);
-                dat.ctx.status = 500;
-                dat.ctx.body = "网络异常";
-            }
-        })
-    }]);
+        onRoute: RouteController_1.RouteController.onRoute(void 0, true),
+    },
+    {
+        menu: path.join(__dirname, 'controllers', 'api'),
+        onRoute: RouteController_1.RouteController.onRoute(RouteController_1.RouteController.loginCheckApi),
+    },
+]);
+app.get("/user/test", (req, resp) => {
+    resp.send("ok");
+});
 /**
  * 静态文件目录
  */
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 /**
  * 404
  */
@@ -100,8 +87,8 @@ http.createServer(app).listen(cfg.httpPort, () => {
 });
 //启动https服务
 // var options:https.ServerOptions = {
-//     key: fs.readFileSync(__dirname + '/configExt/keys/server.key'),
-//     cert: fs.readFileSync(__dirname + '/configExt/keys/server.pem'),
+//     key: fs.readFileSync(__dirname + '/config/keys/server.key'),
+//     cert: fs.readFileSync(__dirname + '/config/keys/server.pem'),
 // };
 //
 // https.createServer(options, app).listen(Config.rpcServer.portHttps, function () {

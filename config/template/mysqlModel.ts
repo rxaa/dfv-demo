@@ -141,9 +141,9 @@ export class ${table} {
     }
 
 
-    static async generate() {
+    static async generate(cover?: boolean) {
 
-        if (fs.existsSync(mysqlModel.dbClassName()))
+        if (!cover && fs.existsSync(mysqlModel.dbClassName()))
             return;
 
         await dfvFile.mkdirs(mysqlModel.outMenu())

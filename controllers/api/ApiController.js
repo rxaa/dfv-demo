@@ -10,22 +10,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dfv_1 = require("dfv");
-let HomeController = class HomeController {
-    /**
-     */
-    async index(id) {
-        //返回值作为response body
-        return "index:" + id;
+const TestReq1_1 = require("../../models/TestReq1");
+class ApiController {
+    async test1(dat) {
+        return dat;
     }
-};
+    async test2() {
+        return "ok";
+    }
+}
 __decorate([
-    dfv_1.route.get('/'),
+    dfv_1.route.comment("接口名称", "接口简介", new TestReq1_1.TestReq1()),
+    dfv_1.route.all(),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [TestReq1_1.TestReq1]),
     __metadata("design:returntype", Promise)
-], HomeController.prototype, "index", null);
-HomeController = __decorate([
-    dfv_1.route.path("")
-], HomeController);
-exports.HomeController = HomeController;
-//# sourceMappingURL=HomeController.js.map
+], ApiController.prototype, "test1", null);
+__decorate([
+    dfv_1.route.all(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ApiController.prototype, "test2", null);
+exports.ApiController = ApiController;
+//# sourceMappingURL=ApiController.js.map

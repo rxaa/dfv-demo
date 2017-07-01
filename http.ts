@@ -13,38 +13,46 @@ import * as cookieParser from 'cookie-parser';
 import * as path from "path";
 import * as cfg from "./config/config";
 import {mysqlModel} from "./config/template/mysqlModel";
+import {Tasks} from "./config/Tasks";
+import {ApiDoc} from "./config/template/html";
+import {RouteController} from "./controllers/RouteController";
 
 
-if (!cfg.isProduction) {
+//定时任务
+Tasks.startAll();
+
+if (cfg.isProduction) {
+    dfvLog.enableConsole = false;
+}
+else {
     mysqlModel.generate();
+    ApiDoc.generate(true);
 }
 
 
 var app = express();
 
 //日志 Config.enableHTML ? 'short' : 'combined'
-app.use(morgan('short', {
-    stream: {
-        write: function (str) {
-            dfvLog.write(str, null, dfvLog.getCutFile("access.log"));
-        }
-    },
-}));
+// app.use(morgan('short', {
+//     stream: {
+//         write: function (str) {
+//            // dfvLog.write(str, null, dfvLog.getCutFile("access.log"));
+//         }
+//     },
+// }));
 
-app.use(bodyParser.urlencoded({
-    extended: false
-}));
-app.use(bodyParser.json());
-app.use(methodOverride());
-
-//启用压缩
-app.use(compression());
+// app.use(bodyParser.urlencoded({
+//     extended: false
+// }));
+// app.use(bodyParser.json());
+// app.use(methodOverride());
+//
+// //启用压缩
+// app.use(compression());
 
 //
 //启用cookie
-app.use(cookieParser("dsqikmnfhtlp"));
-
-// app.use(app.router);
+// app.use(cookieParser("dsqikmnfhtlp"));
 
 /**
  * 未处理的Promise Rejection
@@ -53,38 +61,30 @@ process.on('unhandledRejection', function (error, promise) {
     dfvLog.write("unhandled Rejection:", error);
 });
 
+
 /**
  * 加载controllers
  */
-route.load(app, [{
-    menu: path.join(__dirname, 'controllers', 'web'),
-    onRoute: async (dat) => {
-        try {
-            if (!dat.valid.ok) {
-                //验证失败
-                dfvLog.write(dat.router.url + " : " + JSON.stringify(dat.valid));
-                dat.ctx.status = 500;
-                dat.ctx.body = dat.valid.msg;
-                return;
-            }
+route.load(app, [
+    {
+        menu: path.join(__dirname, 'controllers', 'web'),
+        onRoute: RouteController.onRoute(void 0, true),
+    },
+    {
+        menu: path.join(__dirname, 'controllers', 'api'),
+        onRoute: RouteController.onRoute(RouteController.loginCheckApi),
+    },
+]);
 
-            let ret = await dat.router.next(dat);
-            if (ret != null)
-                dat.ctx.body = ret;
-        } catch (e) {
-            dfvLog.write(dat.router.url + " : " + JSON.stringify(dat.valid), e)
-            dat.ctx.status = 500;
-            dat.ctx.body = "网络异常";
-        }
-    }
-}]);
 
+app.get("/user/test", (req, resp) => {
+    resp.send("ok");
+});
 
 /**
  * 静态文件目录
  */
-app.use(express.static(path.join(__dirname, 'public')));
-
+// app.use(express.static(path.join(__dirname, 'public')));
 
 /**
  * 404
@@ -112,8 +112,8 @@ http.createServer(app).listen(cfg.httpPort, () => {
 
 //启动https服务
 // var options:https.ServerOptions = {
-//     key: fs.readFileSync(__dirname + '/configExt/keys/server.key'),
-//     cert: fs.readFileSync(__dirname + '/configExt/keys/server.pem'),
+//     key: fs.readFileSync(__dirname + '/config/keys/server.key'),
+//     cert: fs.readFileSync(__dirname + '/config/keys/server.pem'),
 // };
 //
 // https.createServer(options, app).listen(Config.rpcServer.portHttps, function () {
