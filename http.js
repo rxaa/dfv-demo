@@ -65,6 +65,10 @@ dfv_1.route.load(app, [
  * 静态文件目录
  */
 app.use(express.static(path.join(__dirname, 'public')));
+if (!cfg.isProduction) {
+    //用于调试
+    app.use(express.static(path.join(__dirname, '/../')));
+}
 /**
  * 404
  */

@@ -1,6 +1,9 @@
 //通过启动参数，判断是否正式环境
 if (process.argv[1] === "production") {
-    exports = require("./config.production");
+    const cfg = require("./config.production")
+    for (let k in cfg) {
+        exports[k] = cfg[k];
+    }
 }
 else {
     /**
