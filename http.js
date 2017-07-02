@@ -4,6 +4,10 @@ const dfv_1 = require("dfv");
 dfv_1.dfvLib.init(__dirname);
 const http = require("http");
 const express = require("express");
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const methodOverride = require("method-override");
+const compression = require("compression");
 const path = require("path");
 const cfg = require("./config/config");
 const mysqlModel_1 = require("./config/template/mysqlModel");
@@ -21,21 +25,20 @@ else {
 }
 var app = express();
 //日志 Config.enableHTML ? 'short' : 'combined'
-// app.use(morgan('short', {
-//     stream: {
-//         write: function (str) {
-//            // dfvLog.write(str, null, dfvLog.getCutFile("access.log"));
-//         }
-//     },
-// }));
-// app.use(bodyParser.urlencoded({
-//     extended: false
-// }));
-// app.use(bodyParser.json());
-// app.use(methodOverride());
-//
-// //启用压缩
-// app.use(compression());
+app.use(morgan('short', {
+    stream: {
+        write: function (str) {
+            dfv_1.dfvLog.write(str, null, dfv_1.dfvLog.getCutFile("access.log"));
+        }
+    },
+}));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(bodyParser.json());
+app.use(methodOverride());
+//启用压缩
+app.use(compression());
 //
 //启用cookie
 // app.use(cookieParser("dsqikmnfhtlp"));
@@ -58,13 +61,10 @@ dfv_1.route.load(app, [
         onRoute: RouteController_1.RouteController.onRoute(RouteController_1.RouteController.loginCheckApi),
     },
 ]);
-app.get("/user/test", (req, resp) => {
-    resp.send("ok");
-});
 /**
  * 静态文件目录
  */
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 /**
  * 404
  */

@@ -33,22 +33,22 @@ else {
 var app = express();
 
 //日志 Config.enableHTML ? 'short' : 'combined'
-// app.use(morgan('short', {
-//     stream: {
-//         write: function (str) {
-//            // dfvLog.write(str, null, dfvLog.getCutFile("access.log"));
-//         }
-//     },
-// }));
+app.use(morgan('short', {
+    stream: {
+        write: function (str) {
+            dfvLog.write(str, null, dfvLog.getCutFile("access.log"));
+        }
+    },
+}));
 
-// app.use(bodyParser.urlencoded({
-//     extended: false
-// }));
-// app.use(bodyParser.json());
-// app.use(methodOverride());
-//
-// //启用压缩
-// app.use(compression());
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(bodyParser.json());
+app.use(methodOverride());
+
+//启用压缩
+app.use(compression());
 
 //
 //启用cookie
@@ -77,14 +77,11 @@ route.load(app, [
 ]);
 
 
-app.get("/user/test", (req, resp) => {
-    resp.send("ok");
-});
 
 /**
  * 静态文件目录
  */
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 /**
  * 404

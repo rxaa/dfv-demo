@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const dfv_1 = require("dfv");
 const viewLayout_1 = require("../views/viewLayout");
@@ -12,7 +20,7 @@ class RouteController {
      * @param errHtml 是否显示html错误页面
      */
     static onRoute(authFunc, errHtml) {
-        return async (dat) => {
+        return (dat) => __awaiter(this, void 0, void 0, function* () {
             try {
                 if (!dat.valid.ok) {
                     //验证失败
@@ -22,7 +30,7 @@ class RouteController {
                     return;
                 }
                 let noAuto = dfv_1.route.getNoAuth(dat.router.clas, dat.router.methodName);
-                let ret = (!noAuto && authFunc) ? await authFunc(dat) : await dat.router.next(dat);
+                let ret = (!noAuto && authFunc) ? yield authFunc(dat) : yield dat.router.next(dat);
                 if (ret != null)
                     dat.ctx.body = ret;
             }
@@ -36,7 +44,7 @@ class RouteController {
                 if (errHtml)
                     dat.ctx.body = viewLayout_1.viewLayout.error(dat.ctx.body);
             }
-        };
+        });
     }
 }
 exports.RouteController = RouteController;
