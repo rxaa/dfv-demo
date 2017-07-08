@@ -1,5 +1,8 @@
 import {dfv} from "dfv/src/public/dfv";
 
+/**
+ * 储存对象至localStorage
+ */
 export class ObjStorage<T> {
     private _dat: T | undefined | null;
     static _count = 0;

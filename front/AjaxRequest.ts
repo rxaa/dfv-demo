@@ -1,5 +1,6 @@
 import {dfvFront} from "dfv/src/public/dfvFront";
 import {dfv} from "dfv/src/public/dfv";
+
 export class AjaxRequest<T> {
 
     http = new XMLHttpRequest();

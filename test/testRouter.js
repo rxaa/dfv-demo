@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const assert = require("assert");
 const dfv_1 = require("dfv");
-const db_1 = require("../models/db");
 describe('router Test', function () {
     it('express route', function () {
         return __awaiter(this, void 0, void 0, function* () {
@@ -18,8 +17,6 @@ describe('router Test', function () {
             let res = yield ht.get();
             assert.equal(res.code, 200);
             assert.equal(res.content, `ok`);
-            db_1.db.connecter.transaction(() => __awaiter(this, void 0, void 0, function* () {
-            }));
         });
     });
 });
