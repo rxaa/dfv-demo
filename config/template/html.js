@@ -34,11 +34,16 @@ class ApiDoc {
     <body>
         <div class="pad10">
                 `;
+        let prevName = "";
         for (let control of ApiDoc.controlList) {
             //接口注释
             let apiComment = control.getComment();
             if (!apiComment)
                 continue;
+            if (control.clas.name != prevName) {
+                ret += `<hr>`;
+            }
+            prevName = control.clas.name;
             ret += `
 
 <div class="back_white pad5 mar10b">
@@ -137,7 +142,7 @@ ${apiComment.title}:
         if (name.length > 0)
             thisName += "this." + name;
         let type = typeof resp;
-        if (type == "number" || resp instanceof Number) {
+        if (type == "number" || resp instanceof Number || resp instanceof Date) {
             ret += tabSize + "<b>" + name + "</b>" + typeStyle("(数字)") + ApiDoc.readComment(classType, thisName) + "<br>";
         }
         else if (type == "string" || (type == "object" && resp == null) || resp instanceof String) {

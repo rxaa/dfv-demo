@@ -18,20 +18,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dfv_1 = require("dfv");
+const MongoConnect_1 = require("dfv/src/db/MongoConnect");
 let HomeController = class HomeController {
     /**
+     * url为 /
      */
-    index(id) {
+    index() {
         return __awaiter(this, void 0, void 0, function* () {
+            MongoConnect_1.MongoConnect;
             //返回值作为response body
-            return "index:" + id;
+            return "index:" + this.ctx.request.ip;
         });
     }
 };
 __decorate([
     dfv_1.route.get('/'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], HomeController.prototype, "index", null);
 HomeController = __decorate([

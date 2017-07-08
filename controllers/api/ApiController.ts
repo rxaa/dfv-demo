@@ -10,6 +10,7 @@ export class ApiController {
         return dat;
     }
 
+    @route.noAuth()
     @route.all()
     async test2() {
         return "ok";

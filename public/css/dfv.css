@@ -372,6 +372,11 @@ ul, ol, li {
     height: 100%;
 }
 
+.hover_yelow:hover {
+    color: #ffc20c;
+    cursor: pointer;
+}
+
 .boder_box {
     box-sizing: border-box;
 }

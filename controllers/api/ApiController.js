@@ -39,6 +39,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ApiController.prototype, "test1", null);
 __decorate([
+    dfv_1.route.noAuth(),
     dfv_1.route.all(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

@@ -29,8 +29,11 @@ class RouteController {
                     dat.ctx.body = errHtml ? viewLayout_1.viewLayout.error(dat.valid.msg) : dat.valid.msg;
                     return;
                 }
-                let noAuto = dfv_1.route.getNoAuth(dat.router.clas, dat.router.methodName);
-                let ret = (!noAuto && authFunc) ? yield authFunc(dat) : yield dat.router.next(dat);
+                /**
+                 * 查找成员函数有无noAuth装饰器
+                 */
+                let noAuth = dfv_1.route.getNoAuth(dat.router.clas, dat.router.methodName);
+                let ret = (!noAuth && authFunc) ? yield authFunc(dat) : yield dat.router.next(dat);
                 if (ret != null)
                     dat.ctx.body = ret;
             }

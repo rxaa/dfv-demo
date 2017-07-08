@@ -38,11 +38,18 @@ export class ApiDoc {
         <div class="pad10">
                 `;
 
+        let prevName = "";
         for (let control of ApiDoc.controlList) {
+
             //接口注释
             let apiComment = control.getComment();
             if (!apiComment)
                 continue;
+
+            if (control.clas.name != prevName) {
+                ret += `<hr>`
+            }
+            prevName = control.clas.name;
 
             ret += `
 
@@ -161,11 +168,10 @@ ${apiComment.title}:
         let type = typeof resp;
 
 
-        if (type == "number" || resp instanceof Number) {
+        if (type == "number" || resp instanceof Number || resp instanceof Date) {
             ret += tabSize + "<b>" + name + "</b>" + typeStyle("(数字)") + ApiDoc.readComment(classType, thisName) + "<br>";
         }
         else if (type == "string" || (type == "object" && resp == null) || resp instanceof String) {
-
 
             ret += tabSize + "<b>" + name + "</b>" + typeStyle("(字串)") + ApiDoc.readComment(classType, thisName) + "<br>";
         }

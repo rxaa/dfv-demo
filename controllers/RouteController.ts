@@ -26,8 +26,11 @@ export class RouteController {
                     return;
                 }
 
-                let noAuto = route.getNoAuth(dat.router.clas, dat.router.methodName);
-                let ret = (!noAuto && authFunc) ? await authFunc(dat) : await dat.router.next(dat);
+                /**
+                 * 查找成员函数有无noAuth装饰器
+                 */
+                let noAuth = route.getNoAuth(dat.router.clas, dat.router.methodName);
+                let ret = (!noAuth && authFunc) ? await authFunc(dat) : await dat.router.next(dat);
                 if (ret != null)
                     dat.ctx.body = ret;
 

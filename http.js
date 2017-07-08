@@ -20,7 +20,13 @@ if (cfg.isProduction) {
     dfv_1.dfvLog.enableConsole = false;
 }
 else {
+    /**
+     * 生成mysql model至/runtime/models
+     */
     mysqlModel_1.mysqlModel.generate();
+    /**
+     * 生成接口文件至/runtime/template
+     */
     html_1.ApiDoc.generate(true);
 }
 var app = express();

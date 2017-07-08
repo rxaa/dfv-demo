@@ -25,7 +25,13 @@ if (cfg.isProduction) {
     dfvLog.enableConsole = false;
 }
 else {
+    /**
+     * 生成mysql model至/runtime/models
+     */
     mysqlModel.generate();
+    /**
+     * 生成接口文件至/runtime/template
+     */
     ApiDoc.generate(true);
 }
 
