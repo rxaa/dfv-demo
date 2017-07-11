@@ -4,7 +4,7 @@ import {dfvContext, route} from "dfv";
 @route.path("")
 export class HomeController {
     /**
-     * 不论是kos还是Express的req,resp都被转换为了统一的ctx属性
+     * 不论是koa还是Express的req,resp都被转换为了统一的ctx属性
      */
     ctx: dfvContext;
 
