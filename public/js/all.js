@@ -753,11 +753,15 @@ define("node_modules/dfv/src/public/dfv", ["require", "exports", "node_modules/d
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     dfvFuncExt_1.dfvFuncExtInit();
+    exports.ARRAY_TYPE = "_ARR_TYPE";
+    if (typeof Symbol === "function") {
+        exports.ARRAY_TYPE = Symbol.for("_ARR_TYPE");
+    }
     function arrayNumber(val) {
         if (!val) {
             val = [];
         }
-        val.__type__ = Number;
+        val[exports.ARRAY_TYPE] = Number;
         return val;
     }
     exports.arrayNumber = arrayNumber;
@@ -765,7 +769,7 @@ define("node_modules/dfv/src/public/dfv", ["require", "exports", "node_modules/d
         if (!val) {
             val = [];
         }
-        val.__type__ = String;
+        val[exports.ARRAY_TYPE] = String;
         return val;
     }
     exports.arrayString = arrayString;
@@ -773,7 +777,7 @@ define("node_modules/dfv/src/public/dfv", ["require", "exports", "node_modules/d
         if (!val) {
             val = [];
         }
-        val.__type__ = type;
+        val[exports.ARRAY_TYPE] = type;
         return val;
     }
     exports.array = array;
@@ -832,7 +836,7 @@ define("node_modules/dfv/src/public/dfv", ["require", "exports", "node_modules/d
             return Math.floor(Date.now() / 1000);
         };
         dfv.getArrayType = function (val) {
-            return val.__type__;
+            return val[exports.ARRAY_TYPE];
         };
         dfv.setPrototypeOf = function (target, proto) {
             if (Object.setPrototypeOf)

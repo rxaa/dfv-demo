@@ -15,6 +15,7 @@ const path = require("path");
 const FuncParse_1 = require("dfv/src/FuncParse");
 const dfv_2 = require("dfv");
 const valid_1 = require("dfv/src/public/valid");
+const ajaxApi_1 = require("./ajaxApi");
 const SPACE_SIZE = "&nbsp;&nbsp;&nbsp;&nbsp;";
 const typeStyle = (text) => `<span class="blue">:${text}</span>`;
 const commentStyle = (text) => `<span class="grey">${text}</span>`;
@@ -201,6 +202,7 @@ ${apiComment.title}:
             }
             else {
                 ApiDoc.start(cover);
+                ajaxApi_1.ajaxApi.genFile();
             }
         };
     }

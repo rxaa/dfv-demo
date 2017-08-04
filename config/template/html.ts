@@ -6,6 +6,7 @@ import {FuncParse} from "dfv/src/FuncParse";
 import {dfvController, dfvFile, dfvRouter, route} from "dfv";
 import {IRouteComment} from "dfv/src/control/route";
 import {valid} from "dfv/src/public/valid";
+import {ajaxApi} from "./ajaxApi";
 
 
 const SPACE_SIZE = "&nbsp;&nbsp;&nbsp;&nbsp;"
@@ -230,7 +231,7 @@ ${apiComment.title}:
         return ret;
     }
 
-    private static controlList = array(dfvController);
+    static controlList = array(dfvController);
 
     static generate(cover?: boolean) {
         dfvRouter.onRouterLoad = ctx => {
@@ -238,7 +239,8 @@ ${apiComment.title}:
                 ApiDoc.controlList.push(ctx);
             }
             else {
-                ApiDoc.start(cover)
+                ApiDoc.start(cover);
+                ajaxApi.genFile();
             }
         }
     }
