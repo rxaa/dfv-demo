@@ -15,6 +15,12 @@ body {
     font-size: 17px;
 }
 
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 table {
     border-color: #66ccff;
     border-spacing: 0px;
@@ -135,6 +141,11 @@ ul, ol, li {
 
 .h_l {
     text-align: left;
+}
+
+.hover_yelow:hover {
+    color: #ffc20c;
+    cursor: pointer;
 }
 
 .h_center {
@@ -372,11 +383,6 @@ ul, ol, li {
     height: 100%;
 }
 
-.hover_yelow:hover {
-    color: #ffc20c;
-    cursor: pointer;
-}
-
 .boder_box {
     box-sizing: border-box;
 }
@@ -406,7 +412,7 @@ ul, ol, li {
     color: #ffe8ac;
 }
 
-.green{
+.green {
     color: #19ce12;
 }
 
@@ -977,7 +983,6 @@ a:hover {
     }
 }
 
-
 .rotate_hover:hover {
     -webkit-animation: rotate 0.7s linear infinite;
     animation: rotate 0.7s linear infinite;
@@ -989,12 +994,12 @@ a:hover {
     animation: rotate 0.8s linear infinite;
 }
 
-
 .anmi_rotate-90 {
     -webkit-animation: rotate-90 0.3s linear 1;
     animation: rotate-90 0.3s linear 1;
     animation-fill-mode: forwards;
 }
+
 @-webkit-keyframes rotate {
     from {
         -webkit-transform: rotate(0deg);
@@ -1030,7 +1035,6 @@ a:hover {
         transform: rotate(-90deg);
     }
 }
-
 
 .icon_err {
     width: 40px;
