@@ -1,23 +1,20 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const assert = require("assert");
 const dfv_1 = require("dfv");
+let a = class {
+    constructor() {
+        this.a = 2;
+        this.b = 3;
+    }
+};
+let c = new a();
 describe('router Test', function () {
-    it('express route', function () {
-        return __awaiter(this, void 0, void 0, function* () {
-            let ht = new dfv_1.dfvHttpClient(`http://localhost:5000/api/test2`);
-            let res = yield ht.get();
-            assert.equal(res.code, 200);
-            assert.equal(res.content, `ok`);
-        });
+    it('express route', async function () {
+        let ht = new dfv_1.dfvHttpClient(`http://localhost:5000/api/test2`);
+        let res = await ht.get();
+        assert.equal(res.code, 200);
+        assert.equal(res.content, `ok`);
     });
 });
 //# sourceMappingURL=testRouter.js.map

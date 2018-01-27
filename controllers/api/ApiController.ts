@@ -1,5 +1,6 @@
 import {dfvContext, route} from "dfv";
 import {TestReq1} from "../../models/TestReq1";
+
 export class ApiController {
     ctx: dfvContext;
 
@@ -15,4 +16,5 @@ export class ApiController {
     async test2() {
         return "ok";
     }
+
 }

@@ -50,7 +50,7 @@ ${ajaxApi.fileText}
 
 }
 `;
-        fs.writeFile(apiFile, imports);
+        fs.writeFileSync(apiFile, imports);
     }
     static getObjType(obj) {
         let ret = "any";

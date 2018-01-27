@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const mongodb_1 = require("mongodb");
@@ -206,19 +198,17 @@ ${apiComment.title}:
             }
         };
     }
-    static start(cover) {
-        return __awaiter(this, void 0, void 0, function* () {
-            //文档目录
-            let menu = ApiDoc.htmlMenu();
-            yield dfv_2.dfvFile.mkdirs(menu);
-            //目录文件
-            let indexFileReal = path.join(menu, ApiDoc.indexFile);
-            if (!cover && fs.existsSync(indexFileReal))
-                return;
-            console.log("generate api document to " + indexFileReal);
-            yield dfv_2.dfvFile.copyFile(path.join(dfv_1.dfv.root, "public", "css", "dfv.css"), path.join(menu, "dfv.css"));
-            fs.writeFileSync(indexFileReal, ApiDoc.genIndex());
-        });
+    static async start(cover) {
+        //文档目录
+        let menu = ApiDoc.htmlMenu();
+        await dfv_2.dfvFile.mkdirs(menu);
+        //目录文件
+        let indexFileReal = path.join(menu, ApiDoc.indexFile);
+        if (!cover && fs.existsSync(indexFileReal))
+            return;
+        console.log("generate api document to " + indexFileReal);
+        await dfv_2.dfvFile.copyFile(path.join(dfv_1.dfv.root, "public", "css", "dfv.css"), path.join(menu, "dfv.css"));
+        fs.writeFileSync(indexFileReal, ApiDoc.genIndex());
     }
 }
 //生成文件路径

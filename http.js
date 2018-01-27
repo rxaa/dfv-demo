@@ -8,6 +8,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const compression = require("compression");
+const cookieParser = require("cookie-parser");
 const path = require("path");
 const cfg = require("./config/config");
 const mysqlModel_1 = require("./config/template/mysqlModel");
@@ -30,7 +31,7 @@ else {
     html_1.ApiDoc.generate(true);
 }
 var app = express();
-//日志 Config.enableHTML ? 'short' : 'combined'
+//日志 cfg.isProduction ? 'short' : 'combined'
 app.use(morgan('short', {
     stream: {
         write: function (str) {
@@ -47,7 +48,7 @@ app.use(methodOverride());
 app.use(compression());
 //
 //启用cookie
-// app.use(cookieParser("dsqikmnfhtlp"));
+app.use(cookieParser("dsqikmnfhtlp"));
 /**
  * 未处理的Promise Rejection
  */

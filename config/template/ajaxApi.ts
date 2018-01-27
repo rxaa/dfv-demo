@@ -59,7 +59,7 @@ ${ajaxApi.fileText}
 
 }
 `;
-        fs.writeFile(apiFile, imports);
+        fs.writeFileSync(apiFile, imports);
     }
 
 

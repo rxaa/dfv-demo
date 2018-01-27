@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const path = require("path");
@@ -121,22 +113,20 @@ export class ${table} {
         // }
         // return null;
     }
-    static generate(cover) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!cover && fs.existsSync(mysqlModel.dbClassName()))
-                return;
-            yield dfv_2.dfvFile.mkdirs(mysqlModel.outMenu());
-            let tables = [];
-            let data = yield db_1.db.connecter.queryPromise("show TABLE status");
-            for (let u of data) {
-                tables.push(u["Name"]);
-            }
-            mysqlModel.dbClass(tables);
-            for (let t of tables) {
-                let data = yield db_1.db.connecter.queryPromise(`show full fields FROM ${t}`);
-                mysqlModel.tableClass(t, data);
-            }
-        });
+    static async generate(cover) {
+        if (!cover && fs.existsSync(mysqlModel.dbClassName()))
+            return;
+        await dfv_2.dfvFile.mkdirs(mysqlModel.outMenu());
+        let tables = [];
+        let data = await db_1.db.connecter.queryPromise("show TABLE status");
+        for (let u of data) {
+            tables.push(u["Name"]);
+        }
+        mysqlModel.dbClass(tables);
+        for (let t of tables) {
+            let data = await db_1.db.connecter.queryPromise(`show full fields FROM ${t}`);
+            mysqlModel.tableClass(t, data);
+        }
     }
 }
 mysqlModel.outMenu = () => path.join(dfv_1.dfv.root, "runtime", "models");
