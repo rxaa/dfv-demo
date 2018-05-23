@@ -1,13 +1,17 @@
 import * as React from 'dfv/src/public/dfvReact'
-import {viewLayout} from "./viewLayout";
+import { viewLayout } from "./viewLayout";
+import { HomeIndex } from "../front/home/HomeIndex"
+import { dfvFront } from 'dfv/src/public/dfvFront';
 
 export const viewHome = {
 
     index: () =>
-        viewLayout.body(
-            <div>
-                Hellow world!
-            </div>
+        viewLayout.home(
+            <script>
+                {() => {
+                    dfvFront.setBody(new HomeIndex().render());
+                }}
+            </script>
         ),
 
 

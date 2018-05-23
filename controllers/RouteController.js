@@ -2,8 +2,23 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const dfv_1 = require("dfv");
 const viewLayout_1 = require("../views/viewLayout");
+const __userInfo__ = "__userInfo__";
 class RouteController {
+    /**
+    * 获取ctx中的用户信息
+    * @param ctx
+    */
+    static getUserInfo(ctx) {
+        return ctx.request[__userInfo__];
+    }
     static loginCheckApi(dat) {
+        //填充用户信息
+        dat.ctx.request[__userInfo__] = {
+            id: 0,
+            //权限转换
+            auth: 0,
+            name: "",
+        };
         return dat.router.next(dat);
     }
     /**

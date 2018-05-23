@@ -1,9 +1,47 @@
 "use strict";
-exports.__esModule = true;
-var dfvFront_1 = require("dfv/src/public/dfvFront");
-var dfv_1 = require("dfv/src/public/dfv");
-var AjaxRequest = (function () {
-    function AjaxRequest(url, clas) {
+Object.defineProperty(exports, "__esModule", { value: true });
+const dfvFront_1 = require("dfv/src/public/dfvFront");
+const dfv_1 = require("dfv/src/public/dfv");
+/**
+ * 文件上传对话框
+ */
+class FileSelectDialog {
+    constructor() {
+        this.fileInput = document.createElement("input");
+        this.onSelectFile = (res) => {
+        };
+        this.fileInput.type = "file";
+        this.fileInput.style.width = "1px";
+        this.fileInput.style.height = "1px";
+        this.fileInput.style.position = "fixed";
+        this.fileInput.style.opacity = "0";
+        document.body.appendChild(this.fileInput);
+    }
+    setFileAccept(accept) {
+        this.fileInput.accept = accept;
+    }
+    show() {
+        this.fileInput.onchange = e => {
+            let file = this.fileInput.files[0];
+            document.body.removeChild(this.fileInput);
+            if (this.onSelectFile)
+                this.onSelectFile(file);
+        };
+        this.fileInput.click();
+    }
+}
+FileSelectDialog.imageArr = [".jpeg", ".jpg", ".bmp", ".png"];
+FileSelectDialog.imageType = FileSelectDialog.imageArr.join(",");
+FileSelectDialog.txtArr = [".xls", ".doc", ".txt", ".pdf"];
+FileSelectDialog.txtType = FileSelectDialog.txtArr.join(",");
+FileSelectDialog.videoArr = [".mp4", ".mpeg", ".wmv", ".avi"];
+FileSelectDialog.videoType = FileSelectDialog.videoArr.join(",");
+exports.FileSelectDialog = FileSelectDialog;
+/**
+ * ajax请求
+ */
+class AjaxRequest {
+    constructor(url, clas) {
         this.url = url;
         this.clas = clas;
         this.http = new XMLHttpRequest();
@@ -20,12 +58,12 @@ var AjaxRequest = (function () {
         /**
          * 上传进度
          */
-        this.onSendProg = function (ev) {
+        this.onSendProg = (ev) => {
         };
         /**
          * 下载进度
          */
-        this.onRespProg = function (ev) {
+        this.onRespProg = (ev) => {
         };
         try {
             this.http.timeout = 15 * 1000;
@@ -33,51 +71,55 @@ var AjaxRequest = (function () {
         catch (e) {
         }
     }
-    AjaxRequest.prototype.setContentTypeJSON = function () {
+    setContentTypeJSON() {
         this.http.setRequestHeader("Content-Type", "application/json; charset=utf-8");
         return this;
-    };
-    AjaxRequest.prototype.setContentTypeForm = function () {
+    }
+    setContentTypeForm() {
         this.http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
         return this;
-    };
+    }
     /**
      * 是否显示错误提示与进度条
      * @param enable
      * @returns {AjaxLoad}
      */
-    AjaxRequest.prototype.msgProgress = function (enable) {
+    msgProgress(enable) {
         this.failedMsg = enable;
         this.loadProgress = enable;
         return this;
-    };
-    AjaxRequest.prototype.showMsg = function (enable) {
+    }
+    showMsg(enable) {
         this.failedMsg = enable;
         return this;
-    };
-    AjaxRequest.prototype.showProgress = function (enable) {
+    }
+    showProgress(enable) {
         this.loadProgress = enable;
         return this;
-    };
+    }
     /**
      * 获取sendJSON()请求的结果
      * @returns {Promise<T>}
      */
-    AjaxRequest.prototype.resp = function () {
-        var _this = this;
+    resp() {
         if (this.loadProgress)
             dfvFront_1.dfvFront.loadStart();
-        return new Promise(function (reso, reject) {
-            _this.procRes(function (res) {
-                if (_this.loadProgress) {
+        return new Promise((reso, reject) => {
+            this.procRes(res => {
+                if (this.loadProgress) {
                     dfvFront_1.dfvFront.loadStop();
                 }
-                var resp = null;
-                var err = null;
+                let resp = null;
+                let err = null;
                 if (res.status == 200) {
-                    resp = JSON.parse(res.responseText);
-                    if (_this.clas)
-                        dfv_1.dfv.setPrototypeOf(resp, _this.clas.prototype);
+                    try {
+                        resp = JSON.parse(res.responseText);
+                        if (this.clas)
+                            dfv_1.dfv.setPrototypeOf(resp, this.clas.prototype);
+                    }
+                    catch (e) {
+                        resp = res.responseText;
+                    }
                 }
                 else {
                     if (res.responseText && res.responseText.length > 0)
@@ -89,19 +131,24 @@ var AjaxRequest = (function () {
                     reso(resp);
                 }
                 else {
-                    if (_this.failedMsg) {
+                    if (this.failedMsg) {
                         dfvFront_1.dfvFront.msgErr(err.message);
                     }
                     reject(resp);
                 }
             });
-            _this.httpSend();
+            this.httpSend();
         });
-    };
+    }
     /**
      * 根据paraObj参数构造http请求
      */
-    AjaxRequest.prototype.httpSend = function () {
+    httpSend() {
+        if (this.formData) {
+            this.http.open("POST", this.url, true);
+            this.http.send(this.formData);
+            return;
+        }
         if (this.notPost) {
             if (this.paraObj)
                 this.http.open("GET", this.url + "?" + dfvFront_1.dfvFront.objToForm(this.paraObj), true);
@@ -114,43 +161,51 @@ var AjaxRequest = (function () {
             this.setContentTypeJSON();
             this.http.send(JSON.stringify(this.paraObj));
         }
-    };
+    }
     /**
      * 设置http请求入参
      * @param obj
      * @param notPost
      * @returns {AjaxLoad}
      */
-    AjaxRequest.prototype.sendJSON = function (obj, notPost) {
+    sendJSON(obj, notPost) {
         if (obj) {
             if (!this.paraObj) {
                 this.paraObj = {};
             }
-            for (var key in obj) {
+            for (let key in obj) {
                 this.paraObj[key] = obj[key];
             }
         }
         this.notPost = !!notPost;
         return this;
-    };
-    AjaxRequest.prototype.get = function (onRes) {
+    }
+    sendForm(form) {
+        if (this.paraObj) {
+            for (let key in this.paraObj) {
+                form.set(key, this.paraObj[key]);
+            }
+        }
+        this.formData = form;
+        return this;
+    }
+    get(onRes) {
         this.procRes(onRes);
         this.http.open("GET", this.url, true);
         return this;
-    };
-    AjaxRequest.prototype.post = function (val, onRes) {
+    }
+    post(val, onRes) {
         this.procRes(onRes);
         this.http.open("POST", this.url, true);
         this.http.send(val);
         return this;
-    };
-    AjaxRequest.prototype.procRes = function (onRes) {
-        var _this = this;
-        this.http.onreadystatechange = function (ev) {
-            if (_this.http.readyState == 4) {
+    }
+    procRes(onRes) {
+        this.http.onreadystatechange = (ev) => {
+            if (this.http.readyState == 4) {
                 if (onRes) {
                     try {
-                        onRes(_this.http);
+                        onRes(this.http);
                     }
                     catch (e) {
                         dfvFront_1.dfvFront.onCatchError(e);
@@ -160,7 +215,7 @@ var AjaxRequest = (function () {
         };
         this.http.onprogress = this.onRespProg;
         this.http.upload.onprogress = this.onSendProg;
-    };
-    return AjaxRequest;
-}());
+    }
+}
 exports.AjaxRequest = AjaxRequest;
+//# sourceMappingURL=AjaxRequest.js.map

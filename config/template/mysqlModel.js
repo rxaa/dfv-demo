@@ -131,6 +131,8 @@ export class ${table} {
 }
 mysqlModel.outMenu = () => path.join(dfv_1.dfv.root, "runtime", "models");
 mysqlModel.dbClassName = () => path.join(mysqlModel.outMenu(), "db.ts");
-mysqlModel.cacheTableMap = {};
+mysqlModel.cacheTableMap = {
+// ts_goods_pic: "gid",
+};
 exports.mysqlModel = mysqlModel;
 //# sourceMappingURL=mysqlModel.js.map

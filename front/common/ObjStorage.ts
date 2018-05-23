@@ -1,7 +1,8 @@
-import {dfv} from "dfv/src/public/dfv";
+import { dfv } from "dfv/src/public/dfv";
+
 
 /**
- * 储存对象至localStorage
+ * localStorage本地储存
  */
 export class ObjStorage<T> {
     private _dat: T | undefined | null;
@@ -38,7 +39,7 @@ export class ObjStorage<T> {
 
     private _key: string;
 
-    constructor(private clas: { new (): T }) {
+    constructor(private clas: { new(): T }) {
         this._key = dfv.getFuncName(this.clas) + "_ObjStorage";
     }
 

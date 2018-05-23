@@ -11,23 +11,23 @@
 			"cwd": "${workspaceRoot}",
 			"preLaunchTask": null,
 			"runtimeExecutable": null,
+			"localRoot": "${workspaceRoot}",
 			"runtimeArgs": [
 				"--nolazy"
 			],
 			"env": {
 				"NODE_ENV": "development"
 			},
-			"externalConsole": false,
-			"sourceMaps": true,
-			"outDir": null
+			"console": "integratedTerminal",
+			"sourceMaps": true
 		},
-		  {
-            "name": "Attach with sourcemaps",
-            "type": "chrome",
-            "request": "attach",
-            "port": 9222,
-            "sourceMaps": true
-        },
+		{
+			"name": "Attach with sourcemaps",
+			"type": "node",
+			"request": "attach",
+			"port": 9222,
+			"sourceMaps": true
+		},
 		{
 			"name": "Attach",
 			"type": "node",
@@ -36,7 +36,6 @@
 			"address": "localhost",
 			"restart": false,
 			"sourceMaps": true,
-			"outDir": null,
 			"localRoot": "${workspaceRoot}",
 			"remoteRoot": null
 		}

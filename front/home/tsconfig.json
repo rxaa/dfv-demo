@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "amd",
+    "target": "es5",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "outFile": "../../public/js/home.js",
+    "lib": [
+      "dom",
+      "es2015",
+      "es5"
+    ],
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noImplicitReturns": true,
+    "sourceMap": false,
+    "watch": true,
+    "allowJs": true,
+    "jsx": "react"
+  },
+  "include": [
+    "../../node_modules/dfv/src/public",
+    "../home"
+  ]
+}

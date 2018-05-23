@@ -1,5 +1,7 @@
-import {dfv, MapString} from "dfv/src/public/dfv";
-import {dfvFront} from "dfv/src/public/dfvFront";
+import { dfv, MapString } from "dfv/src/public/dfv";
+import { dfvFront } from "dfv/src/public/dfvFront";
+
+
 export class LoadEvent {
     type: number = LoadEvent.funcEvent;
     dat: string = "";

@@ -1,4 +1,5 @@
-import {dfvContext, route} from "dfv";
+import { dfvContext, route } from "dfv";
+import { viewHome } from "../../views/viewHome";
 
 
 @route.path("")
@@ -15,7 +16,7 @@ export class HomeController {
     @route.get('/')
     async index() {
         //返回值作为response body
-        return "index:" + this.ctx.request.ip;
+        return viewHome.index();
     }
 
 

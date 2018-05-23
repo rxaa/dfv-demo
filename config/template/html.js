@@ -156,7 +156,7 @@ ${apiComment.title}:
                 }
                 ret += ApiDoc.recurObj(arrObj, "", clasType, SPACE_SIZE + tabSize);
             }
-            else {
+            else { //数组无内容从dfv.arrayType取类型
                 let arrType = dfv_1.dfv.getArrayType(resp);
                 if (arrType) {
                     ret += ApiDoc.recurObj(new arrType(), "", arrType, SPACE_SIZE + tabSize);

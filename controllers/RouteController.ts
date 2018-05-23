@@ -1,11 +1,32 @@
-import {IOnRouteParas} from "dfv/src/control/dfvController";
-import {dfvLog, route} from "dfv";
-import {viewLayout} from "../views/viewLayout";
-import {ShowAbleErr} from "dfv/src/public/dfv";
+import { IOnRouteParas } from "dfv/src/control/dfvController";
+import { dfvLog, route } from "dfv";
+import { viewLayout } from "../views/viewLayout";
+import { ShowAbleErr } from "dfv/src/public/dfv";
+import { dfvContext } from "dfv/src/dfvContext";
+import { RouteUser } from "./RouteUser";
+
+
+const __userInfo__ = "__userInfo__";
+
 export class RouteController {
+
+    /**
+    * 获取ctx中的用户信息
+    * @param ctx 
+    */
+    static getUserInfo(ctx: dfvContext) {
+        return ctx.request[__userInfo__] as RouteUser | undefined
+    }
 
     static loginCheckApi(dat: IOnRouteParas) {
 
+        //填充用户信息
+        dat.ctx.request[__userInfo__] = {
+            id: 0,
+            //权限转换
+            auth: 0,
+            name: "",
+        } as RouteUser;
 
         return dat.router.next(dat);
     }

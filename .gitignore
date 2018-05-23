@@ -2,3 +2,5 @@
 /.idea
 *.js.map
 /runtime
+/public/js/home.js
+/public/js/manage.js

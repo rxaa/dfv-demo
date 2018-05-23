@@ -1,11 +1,67 @@
-import {dfvFront} from "dfv/src/public/dfvFront";
-import {dfv} from "dfv/src/public/dfv";
+import { dfvFront } from "dfv/src/public/dfvFront";
+import { dfv } from "dfv/src/public/dfv";
 
+/**
+ * 文件上传对话框
+ */
+export class FileSelectDialog {
+    fileInput = document.createElement("input");
+
+    constructor() {
+        this.fileInput.type = "file";
+        this.fileInput.style.width = "1px";
+        this.fileInput.style.height = "1px";
+        this.fileInput.style.position = "fixed";
+        this.fileInput.style.opacity = "0"
+        document.body.appendChild(this.fileInput);
+
+    }
+
+    setFileAccept(accept: string) {
+        this.fileInput.accept = accept;
+    }
+
+
+    static imageArr = [".jpeg", ".jpg", ".bmp", ".png"];
+    static imageType = FileSelectDialog.imageArr.join(",");
+
+    static txtArr = [".xls", ".doc", ".txt", ".pdf"]
+    static txtType = FileSelectDialog.txtArr.join(",");
+
+    static videoArr = [".mp4", ".mpeg", ".wmv", ".avi"];
+    static videoType = FileSelectDialog.videoArr.join(",");
+
+
+
+    onSelectFile = (res: File) => {
+
+    }
+
+    show() {
+        this.fileInput.onchange = e => {
+            let file = this.fileInput!.files![0];
+            document.body.removeChild(this.fileInput);
+            if (this.onSelectFile)
+                this.onSelectFile(file);
+        }
+        this.fileInput.click();
+    }
+
+}
+
+/**
+ * ajax请求
+ */
 export class AjaxRequest<T> {
 
     http = new XMLHttpRequest();
 
-    constructor(public url: string, public clas?: {new(): T}) {
+    /**
+     * 文件表单
+     */
+    formData: FormData;
+
+    constructor(public url: string, public clas?: { new(): T }) {
         try {
             this.http.timeout = 15 * 1000;
         } catch (e) {
@@ -50,7 +106,7 @@ export class AjaxRequest<T> {
     /**
      * sendJSON()get或post参数
      */
-    paraObj: Object|null = null;
+    paraObj: Object | null = null;
     /**
      * 是否get请求
      */
@@ -69,11 +125,15 @@ export class AjaxRequest<T> {
                     dfvFront.loadStop();
                 }
                 let resp: any = null;
-                let err: Error|null = null;
+                let err: Error | null = null;
                 if (res.status == 200) {
-                    resp = JSON.parse(res.responseText);
-                    if (this.clas)
-                        dfv.setPrototypeOf(resp, this.clas.prototype);
+                    try {
+                        resp = JSON.parse(res.responseText);
+                        if (this.clas)
+                            dfv.setPrototypeOf(resp, this.clas.prototype);
+                    } catch (e) {
+                        resp = res.responseText;
+                    }
                 }
                 else {
                     if (res.responseText && res.responseText.length > 0)
@@ -99,6 +159,12 @@ export class AjaxRequest<T> {
      * 根据paraObj参数构造http请求
      */
     httpSend() {
+        if (this.formData) {
+            this.http.open("POST", this.url, true);
+            this.http.send(this.formData);
+            return;
+        }
+
         if (this.notPost) {
             if (this.paraObj)
                 this.http.open("GET", this.url + "?" + dfvFront.objToForm(this.paraObj), true);
@@ -120,7 +186,7 @@ export class AjaxRequest<T> {
      * @param notPost
      * @returns {AjaxLoad}
      */
-    sendJSON(obj: Object|null, notPost?: boolean): this {
+    sendJSON(obj: Object | null, notPost?: boolean): this {
         if (obj) {
             if (!this.paraObj) {
                 this.paraObj = {};
@@ -132,6 +198,16 @@ export class AjaxRequest<T> {
         }
 
         this.notPost = !!notPost;
+        return this;
+    }
+
+    sendForm(form: FormData): this {
+        if (this.paraObj) {
+            for (let key in this.paraObj) {
+                form.set(key, this.paraObj[key]);
+            }
+        }
+        this.formData = form;
         return this;
     }
 

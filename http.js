@@ -107,5 +107,5 @@ http.createServer(app).listen(cfg.httpPort, () => {
 // }).on('connection', function (socket: net.Socket) {
 //     //console.log("A new connection was made by a client.");
 //     socket.setTimeout(10 * 60 * 1000);
-// }); 
+// });
 //# sourceMappingURL=http.js.map

@@ -10,13 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dfv_1 = require("dfv");
+const viewHome_1 = require("../../views/viewHome");
 let HomeController = class HomeController {
     /**
      * url为 /
      */
     async index() {
         //返回值作为response body
-        return "index:" + this.ctx.request.ip;
+        return viewHome_1.viewHome.index();
     }
 };
 __decorate([

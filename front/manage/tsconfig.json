@@ -5,11 +5,11 @@
     "moduleResolution": "node",
     "removeComments": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "outFile": "../public/js/all.js",
+    "emitDecoratorMetadata": false,
+    "outFile": "../../public/js/manage.js",
     "lib": [
       "dom",
-      "es2015.promise",
+      "es2015",
       "es5"
     ],
     "strictNullChecks": true,
@@ -22,8 +22,8 @@
     "allowJs": true,
     "jsx": "react"
   },
-  "exclude": [
-    //    "public",
-    "../controllers"
+  "include": [
+    "../../node_modules/dfv/src/public",
+    "../manage"
   ]
 }

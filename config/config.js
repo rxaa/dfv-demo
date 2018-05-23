@@ -20,12 +20,12 @@ else {
 
     /**
      * mysql配置文件
-     * @type {IPoolConfig & MysqlConfig}
+     * @type {mysql.ConnectionConfig & MysqlConfig}
      */
     exports.mysql = {
         host: '127.0.0.1',
         user: 'root',
-        password: '123456',
+        password: '',
         database: 'blog',
         port: 3306,
 
