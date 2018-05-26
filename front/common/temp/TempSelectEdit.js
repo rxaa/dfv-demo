@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("dfv/src/public/dfvReact");
 class TempSelectEdit {
@@ -35,21 +27,19 @@ class TempSelectEdit {
                     React.createElement("select", { class: "txt_blue", style: { width: "100%" } }, list),
                 this.info = React.createElement("span", { class: "red" }));
     }
-    onValid(e) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                if (this.validEdit)
-                    e.dat[e.field] = yield this.validEdit(this.selec.value, e.dat);
-                else
-                    e.dat[e.field] = this.selec.value;
-                this.info.innerHTML = "";
-            }
-            catch (err) {
-                this.info.innerHTML = err.message;
-                return false;
-            }
-            return true;
-        });
+    async onValid(e) {
+        try {
+            if (this.validEdit)
+                e.dat[e.field] = await this.validEdit(this.selec.value, e.dat);
+            else
+                e.dat[e.field] = this.selec.value;
+            this.info.innerHTML = "";
+        }
+        catch (err) {
+            this.info.innerHTML = err.message;
+            return false;
+        }
+        return true;
     }
 }
 exports.TempSelectEdit = TempSelectEdit;

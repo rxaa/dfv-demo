@@ -31,6 +31,7 @@ else {
     html_1.ApiDoc.generate(true);
 }
 var app = express();
+app.disable('x-powered-by');
 //日志 cfg.isProduction ? 'short' : 'combined'
 app.use(morgan('short', {
     stream: {
@@ -72,6 +73,10 @@ dfv_1.route.load(app, [
  * 静态文件目录
  */
 app.use(express.static(path.join(__dirname, 'public')));
+/**
+ * 上传文件路径
+ */
+app.use(express.static(path.join(__dirname, 'runtime/file')));
 if (!cfg.isProduction) {
     //用于调试
     app.use(express.static(path.join(__dirname, '/../')));

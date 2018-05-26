@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("dfv/src/public/dfvReact");
+/**
+ * 横向滑动菜单
+ */
 class SlideTab {
     constructor() {
         this.titles = Array();

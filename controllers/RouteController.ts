@@ -1,9 +1,11 @@
 import { IOnRouteParas } from "dfv/src/control/dfvController";
 import { dfvLog, route } from "dfv";
 import { viewLayout } from "../views/viewLayout";
-import { ShowAbleErr } from "dfv/src/public/dfv";
+import { ShowAbleErr, dfv } from "dfv/src/public/dfv";
 import { dfvContext } from "dfv/src/dfvContext";
 import { RouteUser } from "./RouteUser";
+import { LoginCheckPara } from "../models/LoginCheckPara";
+import { db } from "../models/db";
 
 
 const __userInfo__ = "__userInfo__";
@@ -18,14 +20,30 @@ export class RouteController {
         return ctx.request[__userInfo__] as RouteUser | undefined
     }
 
-    static loginCheckApi(dat: IOnRouteParas) {
+    /**
+     *  登陆验证
+     * @param dat
+     */
+    static async loginCheckApi(dat: IOnRouteParas) {
+
+        //分别尝试从url,body或multipart中获取请求参数
+        let para: LoginCheckPara = dat.ctx.request.method.toLowerCase() == "get" ?
+            dat.ctx.request.query : dat.ctx.request.body;
+        if (dat.ctx.multipart)
+            para = dat.ctx.multipart.fields as any;
+
+
+        //获取用户信息并缓存
+        let user = (await db.dfv_user().cacheGetInt(parseInt(para.uid)))[0];
+        if (!user || user.token != para.token_) {
+            throw dfv.err("未登陆1")
+        }
 
         //填充用户信息
         dat.ctx.request[__userInfo__] = {
-            id: 0,
-            //权限转换
-            auth: 0,
-            name: "",
+            uid: user.uid,
+            auth: user.auth,
+            name: user.id,
         } as RouteUser;
 
         return dat.router.next(dat);

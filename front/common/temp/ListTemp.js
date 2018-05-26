@@ -1,22 +1,14 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("dfv/src/public/dfvReact");
 const ListTempView_1 = require("./ListTempView");
-const apiCRUD_1 = require("../../front/db/apiCRUD");
+const apiCRUD_1 = require("../db/apiCRUD");
 const TempTextEdit_1 = require("./TempTextEdit");
 const dfv_1 = require("dfv/src/public/dfv");
 const valid_1 = require("dfv/src/public/valid");
 const dfvFront_1 = require("dfv/src/public/dfvFront");
 const dfvWindow_1 = require("dfv/src/public/dfvWindow");
-const DbSession_1 = require("../../front/db/DbSession");
+const DbSession_1 = require("../db/DbSession");
 /**
  * 新建list模板
  * @param tableName 显示的表或视图
@@ -133,7 +125,7 @@ class ListTemp {
             enableDel: true,
             enableOperate: true,
         };
-        this.onItemClick = (dat, row, field, target) => __awaiter(this, void 0, void 0, function* () {
+        this.onItemClick = async (dat, row, field, target) => {
             let title = this.cfg.showFieldMap[field];
             if (!title)
                 title = field;
@@ -154,16 +146,16 @@ class ListTemp {
                     value: dat[field],
                     funcValue: showValue,
                 };
-                yield itemEdit.onShow(data);
+                await itemEdit.onShow(data);
                 if (data.dom == null)
                     return;
                 let wind = new dfvWindow_1.dfvWindow();
                 wind.addCover();
-                wind.showWithOk(`<b>${title}:</b>`, data.dom, (pop) => __awaiter(this, void 0, void 0, function* () {
-                    let valid = yield itemEdit.onValid(data);
+                wind.showWithOk(`<b>${title}:</b>`, data.dom, async (pop) => {
+                    let valid = await itemEdit.onValid(data);
                     if (!valid)
                         return;
-                    yield apiCRUD_1.apiCRUD.selectUpdateList({
+                    await apiCRUD_1.apiCRUD.selectUpdateList({
                         id: priId,
                         id_name: this.primaryKeyName,
                         sets: [field, "set", dat[field]],
@@ -172,7 +164,7 @@ class ListTemp {
                     }).resp();
                     this.refreshList();
                     wind.close();
-                }));
+                });
                 return;
             }
             let custom = this.cfg.customFieldMap[field];
@@ -182,10 +174,10 @@ class ListTemp {
             }
             let wind = new dfvWindow_1.dfvWindow();
             wind.addCover();
-            wind.showWithOk(`<b>${title}:</b>`, showValue, (pop) => __awaiter(this, void 0, void 0, function* () {
+            wind.showWithOk(`<b>${title}:</b>`, showValue, async (pop) => {
                 wind.close();
-            }));
-        });
+            });
+        };
         /**
          * ajax结果
          * @type {ListResp}
@@ -275,7 +267,7 @@ class ListTemp {
         };
         this.popAddWindow = null;
         this.popEditWindow = null;
-        this.onEditAllCommit = (dat) => __awaiter(this, void 0, void 0, function* () {
+        this.onEditAllCommit = async (dat) => {
             for (let k in this.cfg.editFiledMap) {
                 let edit = this.cfg.editFiledMap[k];
                 // let showFunc = this.cfg.showFunc[k];
@@ -292,10 +284,10 @@ class ListTemp {
                     value: dat[k],
                     funcValue: dat[k],
                 };
-                if (!(yield edit.onValid(e)))
+                if (!(await edit.onValid(e)))
                     return;
             }
-            if (!(yield this.beforEditAllCommit(dat)))
+            if (!(await this.beforEditAllCommit(dat)))
                 return;
             let priId = dat[this.primaryKeyName];
             let dbSet = new DbSession_1.DbSession(this.tableName);
@@ -304,20 +296,20 @@ class ListTemp {
                     continue;
                 dbSet.set(f => f[k].set(dat[k]));
             }
-            yield apiCRUD_1.apiCRUD.selectUpdateList({
+            await apiCRUD_1.apiCRUD.selectUpdateList({
                 id: priId,
                 id_name: this.primaryKeyName,
                 sets: dbSet._set,
                 table: dfv_1.dfv.getFuncName(this.tableName),
                 where: [],
             }).resp();
-            yield this.onEditSuccess(dat);
+            await this.onEditSuccess(dat);
             if (this.popEditWindow) {
                 this.popEditWindow.close();
                 this.popEditWindow = null;
             }
             this.refreshList();
-        });
+        };
     }
     /**
      * 改为正序显示
@@ -413,7 +405,7 @@ class ListTemp {
      */
     setSelectOneMode(func) {
         this.selectMode = true;
-        this.onAddClick = () => __awaiter(this, void 0, void 0, function* () {
+        this.onAddClick = async () => {
             let sels = this.getCheckedRows();
             if (sels.length > 0) {
                 func(sels[0].dat, sels[0].index);
@@ -421,7 +413,7 @@ class ListTemp {
             else {
                 func(null, null);
             }
-        });
+        };
     }
     /**
      * ajax重新加载列表数据
@@ -615,89 +607,77 @@ class ListTemp {
     /**
      * 添加按钮点击
      */
-    onAddClick() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let ins = valid_1.valid.bindAble(this.insertTable);
-            let insExtView = yield this.view.insertExtView(ins);
-            this.popAddWindow = dfvFront_1.dfvFront.alert(`<b>添加-${this.title}:</b>`, yield this.view.addTemp(ins, insExtView));
-        });
+    async onAddClick() {
+        let ins = valid_1.valid.bindAble(this.insertTable);
+        let insExtView = await this.view.insertExtView(ins);
+        this.popAddWindow = dfvFront_1.dfvFront.alert(`<b>添加-${this.title}:</b>`, await this.view.addTemp(ins, insExtView));
     }
     /**
      * 点击编辑所有字段
      * @param index
      * @returns {Promise<void>}
      */
-    onEditAllClick(index) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let edit = valid_1.valid.bindAble(this.list[index]);
-            let insExtView = yield this.view.editAllExtView(edit);
-            this.popEditWindow = dfvFront_1.dfvFront.alert(`<b>编辑:</b>`, yield this.view.editAllTemp(edit, insExtView, index));
-        });
+    async onEditAllClick(index) {
+        let edit = valid_1.valid.bindAble(this.list[index]);
+        let insExtView = await this.view.editAllExtView(edit);
+        this.popEditWindow = dfvFront_1.dfvFront.alert(`<b>编辑:</b>`, await this.view.editAllTemp(edit, insExtView, index));
     }
-    beforEditAllCommit(edit) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let c = yield valid_1.valid.checkAsync(edit);
-            if (!c.ok) {
-                if (c.msg != "") {
-                    dfvFront_1.dfvFront.msg(c.msg);
-                }
-                return false;
+    async beforEditAllCommit(edit) {
+        let c = await valid_1.valid.checkAsync(edit);
+        if (!c.ok) {
+            if (c.msg != "") {
+                dfvFront_1.dfvFront.msg(c.msg);
             }
-            return true;
-        });
+            return false;
+        }
+        return true;
     }
-    onEditSuccess(edit) {
-        return __awaiter(this, void 0, void 0, function* () {
-        });
+    async onEditSuccess(edit) {
     }
-    beforInsertCommit(edit) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let c = yield valid_1.valid.checkAsync(edit);
-            if (!c.ok) {
-                if (c.msg != "") {
-                    dfvFront_1.dfvFront.msg(c.msg);
-                }
-                return false;
+    async beforInsertCommit(edit) {
+        let c = await valid_1.valid.checkAsync(edit);
+        if (!c.ok) {
+            if (c.msg != "") {
+                dfvFront_1.dfvFront.msg(c.msg);
             }
-            return true;
-        });
+            return false;
+        }
+        return true;
     }
     /**
      * 插入点击事件
      * @param ins
      */
-    onInsertClick(ins) {
-        return __awaiter(this, void 0, void 0, function* () {
-            for (let k in this.cfg.addFieldMap) {
-                let edit = this.cfg.addFieldMap[k];
-                // let showFunc = this.cfg.showFunc[k];
-                // let showValue = ins[k];
-                // if (showFunc)
-                //     showValue = showFunc(showValue, ins as T, 0);
-                let e = {
-                    dat: ins,
-                    dom: null,
-                    isEditAll: true,
-                    isAdd: true,
-                    index: 0,
-                    field: k,
-                    value: ins[k],
-                    funcValue: ins[k],
-                };
-                if (!(yield edit.onValid(e)))
-                    return;
-            }
-            if (!(yield this.beforInsertCommit(ins))) {
+    async onInsertClick(ins) {
+        for (let k in this.cfg.addFieldMap) {
+            let edit = this.cfg.addFieldMap[k];
+            // let showFunc = this.cfg.showFunc[k];
+            // let showValue = ins[k];
+            // if (showFunc)
+            //     showValue = showFunc(showValue, ins as T, 0);
+            let e = {
+                dat: ins,
+                dom: null,
+                isEditAll: true,
+                isAdd: true,
+                index: 0,
+                field: k,
+                value: ins[k],
+                funcValue: ins[k],
+            };
+            if (!(await edit.onValid(e)))
                 return;
+        }
+        if (!(await this.beforInsertCommit(ins))) {
+            return;
+        }
+        let insDb = new DbSession_1.DbSession(this.insertTable);
+        insDb.insert(ins).then(res => {
+            if (this.popAddWindow) {
+                this.popAddWindow.close();
+                this.popAddWindow = null;
             }
-            let insDb = new DbSession_1.DbSession(this.insertTable);
-            insDb.insert(ins).then(res => {
-                if (this.popAddWindow) {
-                    this.popAddWindow.close();
-                    this.popAddWindow = null;
-                }
-                this.firstPage();
-            });
+            this.firstPage();
         });
     }
     /**

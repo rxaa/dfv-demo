@@ -16,9 +16,8 @@
     "jsx": "react"
   },
   "exclude": [
-    //    "public",
+    "public",
     "node_modules",
-    "front",
     "runtime"
   ]
 }

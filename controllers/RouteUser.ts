@@ -7,7 +7,7 @@ export class RouteUser {
     /**
     * 用户id
     */
-    id: number = 0;
+    uid: number = 0;
 
     /**
      * 用户名

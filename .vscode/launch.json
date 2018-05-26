@@ -22,13 +22,6 @@
 			"sourceMaps": true
 		},
 		{
-			"name": "Attach with sourcemaps",
-			"type": "node",
-			"request": "attach",
-			"port": 9222,
-			"sourceMaps": true
-		},
-		{
 			"name": "Attach",
 			"type": "node",
 			"request": "attach",

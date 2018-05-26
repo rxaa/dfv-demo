@@ -1,4 +1,4 @@
-import {dfvLib, dfvLog, route} from "dfv";
+import { dfvLib, dfvLog, route } from "dfv";
 dfvLib.init(__dirname);
 
 import * as https from 'https';
@@ -12,10 +12,10 @@ import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
 import * as path from "path";
 import * as cfg from "./config/config";
-import {mysqlModel} from "./config/template/mysqlModel";
-import {Tasks} from "./config/Tasks";
-import {ApiDoc} from "./config/template/html";
-import {RouteController} from "./controllers/RouteController";
+import { mysqlModel } from "./config/template/mysqlModel";
+import { Tasks } from "./config/Tasks";
+import { ApiDoc } from "./config/template/html";
+import { RouteController } from "./controllers/RouteController";
 
 
 //定时任务
@@ -37,6 +37,8 @@ else {
 
 
 var app = express();
+
+app.disable('x-powered-by');
 
 //日志 cfg.isProduction ? 'short' : 'combined'
 app.use(morgan('short', {
@@ -88,6 +90,10 @@ route.load(app, [
  * 静态文件目录
  */
 app.use(express.static(path.join(__dirname, 'public')));
+/**
+ * 上传文件路径
+ */
+app.use(express.static(path.join(__dirname, 'runtime/file')));
 if (!cfg.isProduction) {
     //用于调试
     app.use(express.static(path.join(__dirname, '/../')));

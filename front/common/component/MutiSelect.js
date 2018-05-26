@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("dfv/src/public/dfvReact");
 const dfvFront_1 = require("dfv/src/public/dfvFront");
+/**
+ * 多选控件
+ */
 class MutiSelect {
     constructor(column, muti = true, onClick = () => {
     }) {

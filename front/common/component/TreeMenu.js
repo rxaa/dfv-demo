@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("dfv/src/public/dfvReact");
 const dfvFront_1 = require("dfv/src/public/dfvFront");
+/**
+ * 树形选择菜单
+ */
 class TreeMenu {
     constructor() {
         this.menu = {};

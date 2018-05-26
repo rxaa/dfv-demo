@@ -120,7 +120,7 @@ export class ListTempView<T, T2> {
         />
 
 
-    dateTitle = "日期范围：";
+    dateTitle = "日期：";
 
     dateFrom: HTMLInputElement;
     dateTo: HTMLInputElement;
@@ -208,11 +208,16 @@ export class ListTempView<T, T2> {
 
     dataCount = () =>
         <div class="flex x-end flex-row y-center">
+            {com.isMobile() ?
+                <span>共:<strong>{dfvBind(e => this.temp.dat.count)}</strong>条</span>
+                :
+                <span>总共:<strong>{dfvBind(e => this.temp.dat.count)}</strong>
+                    条,每页<strong>{this.itemCount}</strong>条</span>
+            }
             {this.buttonClear =
                 <button class="button_green pad4-10" onclick={() => this.temp.onClearClick()}>
                     刷新
-                </button>} 总共：<strong>{dfvBind(e => this.temp.dat.count)}</strong>
-            条,每页<strong>{this.itemCount}</strong>条
+        </button>}
         </div>
 
 
@@ -368,23 +373,23 @@ export class ListTempView<T, T2> {
                         }
                     </div>
                 }
-                <div class="flex-row x-center mar10t">
-                    <button className="button_white mar10l  pad4-10" onclick={() => this.temp.firstPage()}>
+                  <div class="flex-row x-center mar10t">
+                    <button className="button_white pad4-10" onclick={() => this.temp.firstPage()}>
                         首页
                     </button>
-                    <button className="button_white mar10l  pad4-10" onclick={() => this.temp.prevPage()}>
-                        上一页
+                    <button className="button_white  mar5l  pad4-10" onclick={() => this.temp.prevPage()}>
+                        上页
                     </button>
-                    <span class="mar10l" onclick={() => this.temp.onPageClick()}>
+                    <span class=" mar5l" onclick={() => this.temp.onPageClick()}>
                         (
                     <span>{dfvBind(e => this.temp.dat.currentPage)}</span>
                         /
                     <span>{dfvBind(e => this.temp.dat.totalPage)}</span>)
                 </span>
-                    <button className="button_white mar10l  pad4-10" onclick={() => this.temp.nextPage()}>
-                        下一页
+                    <button className="button_white  mar5l  pad4-10" onclick={() => this.temp.nextPage()}>
+                        下页
                     </button>
-                    <button className="button_white mar10l  pad4-10" onclick={() => this.temp.lastPage()}>
+                    <button className="button_white  mar5l  pad4-10" onclick={() => this.temp.lastPage()}>
                         尾页
                     </button>
                 </div>

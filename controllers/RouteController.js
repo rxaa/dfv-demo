@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const dfv_1 = require("dfv");
 const viewLayout_1 = require("../views/viewLayout");
+const dfv_2 = require("dfv/src/public/dfv");
+const db_1 = require("../models/db");
 const __userInfo__ = "__userInfo__";
 class RouteController {
     /**
@@ -11,13 +13,26 @@ class RouteController {
     static getUserInfo(ctx) {
         return ctx.request[__userInfo__];
     }
-    static loginCheckApi(dat) {
+    /**
+     *  登陆验证
+     * @param dat
+     */
+    static async loginCheckApi(dat) {
+        //分别尝试从url,body或multipart中获取请求参数
+        let para = dat.ctx.request.method.toLowerCase() == "get" ?
+            dat.ctx.request.query : dat.ctx.request.body;
+        if (dat.ctx.multipart)
+            para = dat.ctx.multipart.fields;
+        //获取用户信息并缓存
+        let user = (await db_1.db.dfv_user().cacheGetInt(parseInt(para.uid)))[0];
+        if (!user || user.token != para.token_) {
+            throw dfv_2.dfv.err("未登陆1");
+        }
         //填充用户信息
         dat.ctx.request[__userInfo__] = {
-            id: 0,
-            //权限转换
-            auth: 0,
-            name: "",
+            uid: user.uid,
+            auth: user.auth,
+            name: user.id,
         };
         return dat.router.next(dat);
     }

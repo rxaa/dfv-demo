@@ -1,5 +1,5 @@
-import {dfvFile, dfvTime} from "dfv";
-import {SqlBuilder} from "dfv/src/db/SqlBuilder";
+import { dfvFile, dfvTime } from "dfv";
+import { SqlBuilder } from "dfv/src/db/SqlBuilder";
 
 export class Tasks {
 

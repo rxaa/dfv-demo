@@ -139,7 +139,7 @@ export class SelectController {
         return { res: res };
     }
 
-    @route.comment("通用列表查询接口", "", {})
+    @route.comment("通用列表count接口", "", {})
     @route.all()
     async count(dat: SelectCountReq) {
         let s = db[dat.table] as SqlBuilder<any>;

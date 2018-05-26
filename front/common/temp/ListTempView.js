@@ -1,18 +1,10 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("dfv/src/public/dfvReact");
 const dfvFront_1 = require("dfv/src/public/dfvFront");
 const dfvBind_1 = require("dfv/src/public/dfvBind");
-const frontCfg_1 = require("../../config/frontCfg");
-const com_1 = require("../../lib/com");
+const frontCfg_1 = require("../../../config/frontCfg");
+const com_1 = require("../../../lib/com");
 class ListTempView {
     constructor(temp) {
         this.temp = temp;
@@ -40,46 +32,42 @@ class ListTempView {
         /**
          * 添加窗口模板
          */
-        this.addTemp = (ins, insertView) => __awaiter(this, void 0, void 0, function* () {
-            return com_1.com.isMobile() ?
-                React.createElement("div", { style: "min-width:130px", class: " pad5" },
-                    yield this.getEditFields(ins, this.temp.cfg.addFieldMap, 0),
-                    insertView,
-                    React.createElement("button", { class: "button_green pad6-12", onclick: () => this.temp.onInsertClick(ins) }, "\u786E\u5B9A\u6DFB\u52A0"))
-                :
-                    React.createElement("div", { style: "min-width:200px", class: "pad10" },
-                        React.createElement("table", { cellPadding: "5" },
-                            yield this.getEditFields(ins, this.temp.cfg.addFieldMap, 0),
-                            insertView,
-                            React.createElement("tr", null,
-                                React.createElement("td", null),
-                                React.createElement("td", null,
-                                    React.createElement("button", { class: "button_green pad6-12", onclick: () => this.temp.onInsertClick(ins) }, "\u786E\u5B9A\u6DFB\u52A0")))));
-        });
+        this.addTemp = async (ins, insertView) => com_1.com.isMobile() ?
+            React.createElement("div", { style: "min-width:130px", class: " pad5" },
+                await this.getEditFields(ins, this.temp.cfg.addFieldMap, 0),
+                insertView,
+                React.createElement("button", { class: "button_green pad6-12", onclick: () => this.temp.onInsertClick(ins) }, "\u786E\u5B9A\u6DFB\u52A0"))
+            :
+                React.createElement("div", { style: "min-width:200px", class: "pad10" },
+                    React.createElement("table", { cellPadding: "5" },
+                        await this.getEditFields(ins, this.temp.cfg.addFieldMap, 0),
+                        insertView,
+                        React.createElement("tr", null,
+                            React.createElement("td", null),
+                            React.createElement("td", null,
+                                React.createElement("button", { class: "button_green pad6-12", onclick: () => this.temp.onInsertClick(ins) }, "\u786E\u5B9A\u6DFB\u52A0")))));
         /**
          * 编辑窗口模板
          */
-        this.editAllTemp = (ins, insertView, index) => __awaiter(this, void 0, void 0, function* () {
-            return com_1.com.isMobile() ?
-                React.createElement("div", { style: "min-width:130px", class: " pad5" },
-                    yield this.getEditFields(ins, this.temp.cfg.editFiledMap, index),
-                    insertView,
-                    React.createElement("button", { class: "button_blue pad6-12", onclick: () => this.temp.onEditAllCommit(ins) }, "\u786E\u5B9A\u7F16\u8F91"))
-                :
-                    React.createElement("div", { style: "min-width:200px", class: "pad10" },
-                        React.createElement("table", { cellPadding: "5" },
-                            yield this.getEditFields(ins, this.temp.cfg.editFiledMap, index),
-                            insertView,
-                            React.createElement("tr", null,
-                                React.createElement("td", null),
-                                React.createElement("td", null,
-                                    React.createElement("button", { class: "button_blue pad6-12", onclick: () => this.temp.onEditAllCommit(ins) }, "\u786E\u5B9A\u7F16\u8F91")))));
-        });
+        this.editAllTemp = async (ins, insertView, index) => com_1.com.isMobile() ?
+            React.createElement("div", { style: "min-width:130px", class: " pad5" },
+                await this.getEditFields(ins, this.temp.cfg.editFiledMap, index),
+                insertView,
+                React.createElement("button", { class: "button_blue pad6-12", onclick: () => this.temp.onEditAllCommit(ins) }, "\u786E\u5B9A\u7F16\u8F91"))
+            :
+                React.createElement("div", { style: "min-width:200px", class: "pad10" },
+                    React.createElement("table", { cellPadding: "5" },
+                        await this.getEditFields(ins, this.temp.cfg.editFiledMap, index),
+                        insertView,
+                        React.createElement("tr", null,
+                            React.createElement("td", null),
+                            React.createElement("td", null,
+                                React.createElement("button", { class: "button_blue pad6-12", onclick: () => this.temp.onEditAllCommit(ins) }, "\u786E\u5B9A\u7F16\u8F91")))));
         /**
          * 标题搜索输入框
          */
         this.searchInput = () => React.createElement("input", { type: "text", class: "txt_blue mar10l", style: "width:150px", placeholder: this.temp.title + "名", value: dfvBind_1.dfvBind(e => this.temp.dat.name) });
-        this.dateTitle = "日期范围：";
+        this.dateTitle = "日期：";
         this.dateInput = () => React.createElement("div", null,
             this.dateTitle,
             this.dateFrom = React.createElement("input", { type: "text", name: "max_time", id: this.temp.uniqueId + "date_from", class: "txt_blue", readOnly: true, style: "width:100px;" }),
@@ -112,13 +100,20 @@ class ListTempView {
          */
         this.addButton = () => React.createElement("button", { class: "button_green pad4-10 mar10l", onclick: () => this.temp.onAddClick() }, "\u6DFB\u52A0");
         this.dataCount = () => React.createElement("div", { class: "flex x-end flex-row y-center" },
+            com_1.com.isMobile() ?
+                React.createElement("span", null,
+                    "\u5171:",
+                    React.createElement("strong", null, dfvBind_1.dfvBind(e => this.temp.dat.count)),
+                    "\u6761")
+                :
+                    React.createElement("span", null,
+                        "\u603B\u5171:",
+                        React.createElement("strong", null, dfvBind_1.dfvBind(e => this.temp.dat.count)),
+                        "\u6761,\u6BCF\u9875",
+                        React.createElement("strong", null, this.itemCount),
+                        "\u6761"),
             this.buttonClear =
-                React.createElement("button", { class: "button_green pad4-10", onclick: () => this.temp.onClearClick() }, "\u5237\u65B0"),
-            " \u603B\u5171\uFF1A",
-            React.createElement("strong", null, dfvBind_1.dfvBind(e => this.temp.dat.count)),
-            "\u6761,\u6BCF\u9875",
-            React.createElement("strong", null, this.itemCount),
-            "\u6761");
+                React.createElement("button", { class: "button_green pad4-10", onclick: () => this.temp.onClearClick() }, "\u5237\u65B0"));
         this.editExtButton = (dat, index) => {
         };
         this.editAllButton = (dat, index) => React.createElement("button", { class: "button_blue mar5l pad4-10", onclick: () => this.temp.onEditAllClick(index) }, "\u7F16\u8F91");
@@ -177,16 +172,16 @@ class ListTempView {
                 this.tbodyList =
                     React.createElement("div", { class: "flex-col mar10t" }, this.initList([])),
                 React.createElement("div", { class: "flex-row x-center mar10t" },
-                    React.createElement("button", { className: "button_white mar10l  pad4-10", onclick: () => this.temp.firstPage() }, "\u9996\u9875"),
-                    React.createElement("button", { className: "button_white mar10l  pad4-10", onclick: () => this.temp.prevPage() }, "\u4E0A\u4E00\u9875"),
-                    React.createElement("span", { class: "mar10l", onclick: () => this.temp.onPageClick() },
+                    React.createElement("button", { className: "button_white pad4-10", onclick: () => this.temp.firstPage() }, "\u9996\u9875"),
+                    React.createElement("button", { className: "button_white  mar5l  pad4-10", onclick: () => this.temp.prevPage() }, "\u4E0A\u9875"),
+                    React.createElement("span", { class: " mar5l", onclick: () => this.temp.onPageClick() },
                         "(",
                         React.createElement("span", null, dfvBind_1.dfvBind(e => this.temp.dat.currentPage)),
                         "/",
                         React.createElement("span", null, dfvBind_1.dfvBind(e => this.temp.dat.totalPage)),
                         ")"),
-                    React.createElement("button", { className: "button_white mar10l  pad4-10", onclick: () => this.temp.nextPage() }, "\u4E0B\u4E00\u9875"),
-                    React.createElement("button", { className: "button_white mar10l  pad4-10", onclick: () => this.temp.lastPage() }, "\u5C3E\u9875")),
+                    React.createElement("button", { className: "button_white  mar5l  pad4-10", onclick: () => this.temp.nextPage() }, "\u4E0B\u9875"),
+                    React.createElement("button", { className: "button_white  mar5l  pad4-10", onclick: () => this.temp.lastPage() }, "\u5C3E\u9875")),
                 this.temp.loadList()));
     }
     initDate() {
@@ -278,48 +273,46 @@ class ListTempView {
      * @param index
      * @returns {Promise<any[]>}
      */
-    getEditFields(dat, fs, index) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let ret = Array();
-            for (let k in fs) {
-                let edit = fs[k];
-                let title = this.temp.cfg.showFieldMap[k];
-                if (title == null)
-                    title = k;
-                let showFunc = this.temp.cfg.showFunc[k];
-                let showValue = dat[k];
-                if (showFunc)
-                    showValue = showFunc(showValue, dat, index);
-                let e = {
-                    dat: dat,
-                    dom: null,
-                    isEditAll: true,
-                    isAdd: true,
-                    index: index,
-                    field: k,
-                    value: dat[k],
-                    funcValue: showValue,
-                };
-                yield edit.onShow(e);
-                if (e.dom == null)
-                    continue;
-                if (com_1.com.isMobile()) {
-                    ret.push(React.createElement("div", { class: " mar10b" },
-                        React.createElement("div", null,
-                            title,
-                            ":"),
-                        React.createElement("div", null, e.dom)));
-                }
-                else {
-                    ret.push(React.createElement("tr", null,
-                        React.createElement("td", null,
-                            title,
-                            ":"),
-                        React.createElement("td", null, e.dom)));
-                }
+    async getEditFields(dat, fs, index) {
+        let ret = Array();
+        for (let k in fs) {
+            let edit = fs[k];
+            let title = this.temp.cfg.showFieldMap[k];
+            if (title == null)
+                title = k;
+            let showFunc = this.temp.cfg.showFunc[k];
+            let showValue = dat[k];
+            if (showFunc)
+                showValue = showFunc(showValue, dat, index);
+            let e = {
+                dat: dat,
+                dom: null,
+                isEditAll: true,
+                isAdd: true,
+                index: index,
+                field: k,
+                value: dat[k],
+                funcValue: showValue,
+            };
+            await edit.onShow(e);
+            if (e.dom == null)
+                continue;
+            if (com_1.com.isMobile()) {
+                ret.push(React.createElement("div", { class: " mar10b" },
+                    React.createElement("div", null,
+                        title,
+                        ":"),
+                    React.createElement("div", null, e.dom)));
             }
-            return ret;
-        });
+            else {
+                ret.push(React.createElement("tr", null,
+                    React.createElement("td", null,
+                        title,
+                        ":"),
+                    React.createElement("td", null, e.dom)));
+            }
+        }
+        return ret;
     }
 }
 exports.ListTempView = ListTempView;

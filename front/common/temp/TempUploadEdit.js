@@ -1,16 +1,8 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("dfv/src/public/dfvReact");
-const AjaxRequest_1 = require("../../front/AjaxRequest");
-const apiCRUD_1 = require("../../front/db/apiCRUD");
+const AjaxRequest_1 = require("../AjaxRequest");
+const apiCRUD_1 = require("..//db/apiCRUD");
 const dfvFront_1 = require("dfv/src/public/dfvFront");
 var UploadFileType;
 (function (UploadFileType) {
@@ -43,26 +35,24 @@ class TempUploadEdit {
                 React.createElement("button", { class: "button_blue pad6-12 mar5l", onclick: e => this.onUpload() }, "\u4E0A\u4F20"),
                 this.info = React.createElement("span", { class: "red" }));
     }
-    onValid(e) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                if (this.validEdit)
-                    e.dat[e.field] = yield this.validEdit(this.pic, e.dat);
-                else
-                    e.dat[e.field] = this.pic;
-                this.info.innerHTML = "";
-            }
-            catch (err) {
-                this.info.innerHTML = err.message;
-                return false;
-            }
-            return true;
-        });
+    async onValid(e) {
+        try {
+            if (this.validEdit)
+                e.dat[e.field] = await this.validEdit(this.pic, e.dat);
+            else
+                e.dat[e.field] = this.pic;
+            this.info.innerHTML = "";
+        }
+        catch (err) {
+            this.info.innerHTML = err.message;
+            return false;
+        }
+        return true;
     }
     onUpload() {
         let dis = new AjaxRequest_1.FileSelectDialog();
         dis.setFileAccept(AjaxRequest_1.FileSelectDialog.imageType);
-        dis.onSelectFile = (fi) => __awaiter(this, void 0, void 0, function* () {
+        dis.onSelectFile = async (fi) => {
             let form = new FormData();
             form.set("file", fi);
             let req = apiCRUD_1.apiCRUD.upload(form).showProgress(false);
@@ -71,11 +61,11 @@ class TempUploadEdit {
             req.onSendProg = e => {
                 this.prog.innerHTML = (e.loaded * 99 / e.total).toFixed(1) + "%";
             };
-            let res = yield req.resp();
+            let res = await req.resp();
             this.pic = res.fid;
             this.img.src = this.getSrc();
             dfvFront_1.dfvFront.setEle(this.cont, this.img);
-        });
+        };
         dis.show();
     }
 }

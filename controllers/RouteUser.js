@@ -8,7 +8,7 @@ class RouteUser {
         /**
         * 用户id
         */
-        this.id = 0;
+        this.uid = 0;
         /**
          * 用户名
          */

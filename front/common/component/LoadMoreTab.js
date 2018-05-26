@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("dfv/src/public/dfvReact");
 const dfvFront_1 = require("dfv/src/public/dfvFront");
+/**
+ * 加载更多,按钮
+ */
 class LoadMoreTab {
     constructor(onLoadClick, hide = false) {
         this.onLoadClick = onLoadClick;

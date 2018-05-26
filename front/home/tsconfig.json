@@ -19,7 +19,7 @@
     "noImplicitReturns": true,
     "sourceMap": false,
     "watch": true,
-    "allowJs": true,
+    "allowJs": false,
     "jsx": "react"
   },
   "include": [

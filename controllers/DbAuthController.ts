@@ -1,3 +1,5 @@
+import { dfv_user } from './../models/dfv_user';
+import { dfv_file } from './../models/dfv_file';
 import { RouteUser } from './RouteUser';
 import { dfv } from 'dfv/src/public/dfv';
 import { RouteController } from './RouteController';
@@ -12,23 +14,23 @@ import { TestReq1 } from '../models/TestReq1';
  * 
  * 只能操作用户自己相关的数据
  */
-const TestReq1Cfg = table(TestReq1, (db, dat) => db.and(f => f.id.eq(dat.id)));
-
+const dfv_fileCfg = table(dfv_file, (db, dat) => db.and(f => f.uid.eq(dat.uid)));
+const dfv_userCfg = table(dfv_user, (db, dat) => db.and(f => f.uid.eq(dat.uid)));
 
 /**
  * 
   * 权限：0.普通用户，1.录入员 2.管理员
   * 
   */
-export const dbSelectCfg = [
+const dbSelectCfg = [
     /**
      * 0.普通用户
      */
     {
-        select: [TestReq1Cfg],
-        update: [TestReq1Cfg],
-        delete: [TestReq1Cfg],
-        insert: [TestReq1],
+        select: [dfv_file, dfv_userCfg],
+        update: [dfv_fileCfg],
+        delete: [dfv_fileCfg],
+        insert: [dfv_file, dfv_user],
     },
     /**
      * 1.录入员,允许全部权限

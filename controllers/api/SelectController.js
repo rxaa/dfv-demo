@@ -210,7 +210,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], SelectController.prototype, "update", null);
 __decorate([
-    dfv_1.route.comment("通用列表查询接口", "", {}),
+    dfv_1.route.comment("通用列表count接口", "", {}),
     dfv_1.route.all(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [SelectReq_1.SelectCountReq]),
