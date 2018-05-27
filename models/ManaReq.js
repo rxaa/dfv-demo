@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const dfv_1 = require("dfv/src/public/dfv");
 const valid_1 = require("dfv/src/public/valid");
 class LoginReq {
     constructor() {
@@ -17,6 +18,10 @@ class LoginReq {
          * 密码的md5值
          */
         this.psw = "";
+        /**
+        * 是否记住密码
+        */
+        this.rember = 0;
     }
 }
 __decorate([
@@ -28,4 +33,14 @@ __decorate([
     __metadata("design:type", Object)
 ], LoginReq.prototype, "psw", void 0);
 exports.LoginReq = LoginReq;
+class DelFileReq {
+    constructor() {
+        this.fids = dfv_1.arrayNumber();
+    }
+}
+__decorate([
+    valid_1.valid.array(f => f.val.length > 0 && f.val.eachToInt(), "文件id不能为空"),
+    __metadata("design:type", Object)
+], DelFileReq.prototype, "fids", void 0);
+exports.DelFileReq = DelFileReq;
 //# sourceMappingURL=ManaReq.js.map

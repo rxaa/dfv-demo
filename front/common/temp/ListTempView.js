@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("dfv/src/public/dfvReact");
 const dfvFront_1 = require("dfv/src/public/dfvFront");
 const dfvBind_1 = require("dfv/src/public/dfvBind");
-const frontCfg_1 = require("../../../config/frontCfg");
 const com_1 = require("../../../lib/com");
+const LayDate_1 = require("../component/LayDate");
 class ListTempView {
     constructor(temp) {
         this.temp = temp;
@@ -34,13 +34,13 @@ class ListTempView {
          */
         this.addTemp = async (ins, insertView) => com_1.com.isMobile() ?
             React.createElement("div", { style: "min-width:130px", class: " pad5" },
-                await this.getEditFields(ins, this.temp.cfg.addFieldMap, 0),
+                await this.getEditFields(ins, this.temp.cfg.addFieldMap, 0, true),
                 insertView,
                 React.createElement("button", { class: "button_green pad6-12", onclick: () => this.temp.onInsertClick(ins) }, "\u786E\u5B9A\u6DFB\u52A0"))
             :
                 React.createElement("div", { style: "min-width:200px", class: "pad10" },
                     React.createElement("table", { cellPadding: "5" },
-                        await this.getEditFields(ins, this.temp.cfg.addFieldMap, 0),
+                        await this.getEditFields(ins, this.temp.cfg.addFieldMap, 0, true),
                         insertView,
                         React.createElement("tr", null,
                             React.createElement("td", null),
@@ -68,11 +68,17 @@ class ListTempView {
          */
         this.searchInput = () => React.createElement("input", { type: "text", class: "txt_blue mar10l", style: "width:150px", placeholder: this.temp.title + "名", value: dfvBind_1.dfvBind(e => this.temp.dat.name) });
         this.dateTitle = "日期：";
+        this.dateFrom = new LayDate_1.LayDateDfv();
+        this.dateTo = new LayDate_1.LayDateDfv();
         this.dateInput = () => React.createElement("div", null,
             this.dateTitle,
-            this.dateFrom = React.createElement("input", { type: "text", name: "max_time", id: this.temp.uniqueId + "date_from", class: "txt_blue", readOnly: true, style: "width:100px;" }),
+            this.dateFrom.render({
+                style: "width:95px;",
+            }),
             "-",
-            this.dateTo = React.createElement("input", { type: "text", name: "min_time", id: this.temp.uniqueId + "date_to", class: "txt_blue", readOnly: true, style: "width:100px;" }),
+            this.dateTo.render({
+                style: "width:95px;",
+            }),
             this.initDate());
         /**
          * 搜索内容
@@ -145,7 +151,7 @@ class ListTempView {
                 React.createElement("thead", null,
                     React.createElement("tr", null,
                         React.createElement("th", { width: "25" }, this.temp.selectMode ? null :
-                            React.createElement("input", { type: "checkbox", onclick: () => this.checkAll(), checked: dfvBind_1.dfvBind(e => this.temp.dat.checkAll) })),
+                            React.createElement("input", { type: "checkbox", onclick: () => this.checkAll() })),
                         this.temp.cfg.showFieldList.map(it => React.createElement("th", null, this.temp.cfg.showFieldMap[it])),
                         this.temp.cfg.customFieldList.map(it => React.createElement("th", null, it)),
                         this.temp.cfg.enableOperate ? React.createElement("th", null, "\u64CD\u4F5C") : null)),
@@ -185,27 +191,20 @@ class ListTempView {
                 this.temp.loadList()));
     }
     initDate() {
-        laydate.render({
-            elem: this.dateFrom,
-            done: (d, date) => this.temp.dat.dateFrom = d,
-            theme: frontCfg_1.frontCfg.mainColor,
-        });
-        laydate.render({
-            elem: this.dateTo,
-            done: (d, date) => this.temp.dat.dateTo = d,
-            theme: frontCfg_1.frontCfg.mainColor
-        });
+        this.dateFrom.onSelected = (d) => this.temp.dat.dateFrom = d;
+        this.dateTo.onSelected = (d) => this.temp.dat.dateTo = d;
     }
     /**
      * 反转选中状态
      * @param currentTarget
      */
     checkAll() {
+        this.temp.dat.checkAll = !this.temp.dat.checkAll;
         for (let i = 0; i < this.tableBody.children.length; i++) {
             let row = this.tableBody.children[i];
             dfvFront_1.dfvFront.eachElement(row, (checkBox) => {
                 if (checkBox.localName == dfvFront_1.LocalName.input && checkBox.type == dfvFront_1.InputType.checkbox) {
-                    checkBox.checked = this.temp.dat.checkAll != true;
+                    checkBox.checked = this.temp.dat.checkAll;
                     return false;
                 }
                 return true;
@@ -266,6 +265,18 @@ class ListTempView {
             return;
         this.temp.onDelClick(list);
     }
+    newLine(title, body) {
+        if (com_1.com.isMobile()) {
+            return (React.createElement("div", { class: " mar10b" },
+                React.createElement("div", null, title),
+                React.createElement("div", null, body)));
+        }
+        else {
+            return (React.createElement("tr", null,
+                React.createElement("td", null, title),
+                React.createElement("td", null, body)));
+        }
+    }
     /**
      * 获取编辑字段列表
      * @param dat
@@ -273,7 +284,7 @@ class ListTempView {
      * @param index
      * @returns {Promise<any[]>}
      */
-    async getEditFields(dat, fs, index) {
+    async getEditFields(dat, fs, index, add) {
         let ret = Array();
         for (let k in fs) {
             let edit = fs[k];
@@ -288,7 +299,7 @@ class ListTempView {
                 dat: dat,
                 dom: null,
                 isEditAll: true,
-                isAdd: true,
+                isAdd: !!add,
                 index: index,
                 field: k,
                 value: dat[k],
@@ -297,20 +308,7 @@ class ListTempView {
             await edit.onShow(e);
             if (e.dom == null)
                 continue;
-            if (com_1.com.isMobile()) {
-                ret.push(React.createElement("div", { class: " mar10b" },
-                    React.createElement("div", null,
-                        title,
-                        ":"),
-                    React.createElement("div", null, e.dom)));
-            }
-            else {
-                ret.push(React.createElement("tr", null,
-                    React.createElement("td", null,
-                        title,
-                        ":"),
-                    React.createElement("td", null, e.dom)));
-            }
+            ret.push(this.newLine(title + ":", e.dom));
         }
         return ret;
     }

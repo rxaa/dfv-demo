@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const frontCfg_1 = require("./../../../config/frontCfg");
 const AjaxRequest_1 = require("../AjaxRequest");
 class apiCRUD {
     /**
@@ -38,7 +39,7 @@ class apiCRUD {
         return apiCRUD.ajax("/select/insert").sendJSON(req);
     }
     static upload(req) {
-        return apiCRUD.ajax("/file/upload").sendForm(req);
+        return apiCRUD.ajax(frontCfg_1.frontCfg.apiUploadFile).sendForm(req);
     }
     static ajax(url, clas) {
         return new AjaxRequest_1.AjaxRequest(url, clas);

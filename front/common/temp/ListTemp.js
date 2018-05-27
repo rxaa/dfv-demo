@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("dfv/src/public/dfvReact");
 const ListTempView_1 = require("./ListTempView");
 const apiCRUD_1 = require("../db/apiCRUD");
-const TempTextEdit_1 = require("./TempTextEdit");
 const dfv_1 = require("dfv/src/public/dfv");
 const valid_1 = require("dfv/src/public/valid");
 const dfvFront_1 = require("dfv/src/public/dfvFront");
@@ -174,7 +173,7 @@ class ListTemp {
             }
             let wind = new dfvWindow_1.dfvWindow();
             wind.addCover();
-            wind.showWithOk(`<b>${title}:</b>`, showValue, async (pop) => {
+            wind.showWithOk(`<b>${title}:</b>`, showValue, (pop) => {
                 wind.close();
             });
         };
@@ -239,9 +238,9 @@ class ListTemp {
             this.dat.dateFrom = "";
             this.dat.dateTo = "";
             if (this.view.dateTo)
-                this.view.dateTo.value = "";
+                this.view.dateTo.setDate("");
             if (this.view.dateFrom)
-                this.view.dateFrom.value = "";
+                this.view.dateFrom.setDate("");
             this.firstPage();
             // this.view.buttonClear.style.display = "hide";
         };
@@ -278,7 +277,7 @@ class ListTemp {
                     dat: dat,
                     dom: null,
                     isEditAll: true,
-                    isAdd: true,
+                    isAdd: false,
                     index: 0,
                     field: k,
                     value: dat[k],
@@ -679,13 +678,6 @@ class ListTemp {
             }
             this.firstPage();
         });
-    }
-    /**
-     * 字串编辑字段
-     * @param validEdit
-     */
-    editText(validEdit) {
-        return new TempTextEdit_1.TempTextEdit(validEdit);
     }
     render() {
         this.onStart();

@@ -17,10 +17,14 @@ const dfv_2 = require("dfv/src/public/dfv");
 const FileUploadReq_1 = require("../../models/FileUploadReq");
 const path = require("path");
 class FileController {
+    /**
+     * 文件上传目录
+     */
     static fileMenu() {
         return dfv_2.dfv.root + "/runtime/file/";
     }
     /**
+     * 下载文件
      */
     async get(dat) {
         if (dat.fid < 1) {
@@ -47,6 +51,10 @@ class FileController {
             dfv_1.dfvLog.err(err);
         });
     }
+    /**
+     * 上传文件
+     * @param dat
+     */
     async upload(dat) {
         if (!FileController.matchSuffix(dat.file.name, [".jpeg", ".jpg", ".bmp", ".png", ".gif"])) {
             throw dfv_2.dfv.err("只允许上传图片！");
@@ -70,6 +78,7 @@ class FileController {
         fi.md5 = dat.file.hash;
         fi.name = dat.file.name;
         fi.uid = user.uid;
+        fi.size = dat.file.size;
         let res = await db_1.db.dfv_file().insert(fi);
         return {
             fid: fi.fid,

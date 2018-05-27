@@ -33,7 +33,7 @@ export class RichText {
 
         var E = (window as any).wangEditor;
 
-        if (E === undefined) {
+        if (E === undefined || !this.dom.parentElement) {
             //异步加载，需要多次尝试
             setTimeout(() => {
                 this.initDiv(ele);
@@ -152,7 +152,7 @@ export class RichText {
                     , '👌', '❤', '😱', '😎',]
             }
         ]
-        this.editor.customConfig.uploadImgServer = '/file/upload';
+        this.editor.customConfig.uploadImgServer = frontCfg.apiUploadFile;
         this.editor.customConfig.uploadFileName = 'file'
 
         // this.editor.customConfig.customAlert = function (info) {

@@ -1,3 +1,4 @@
+import { frontCfg } from './../../../config/frontCfg';
 import {
     SelectCountReq, SelectDelReq, SelectInsertReq, SelectReq,
     SelectUpdateReq,
@@ -53,7 +54,7 @@ export class apiCRUD {
     }
 
     static upload(req: FormData) {
-        return apiCRUD.ajax<UploadRes>("/file/upload").sendForm(req);
+        return apiCRUD.ajax<UploadRes>(frontCfg.apiUploadFile).sendForm(req);
     }
 
 

@@ -10,8 +10,11 @@ import { UploadRes } from "../../front/common/temp/SelectReq";
 
 
 export class FileController {
-    ctx: dfvContext;
+    ctx!: dfvContext;
 
+    /**
+     * 文件上传目录
+     */
     static fileMenu() {
         return dfv.root + "/runtime/file/";
     }
@@ -19,6 +22,7 @@ export class FileController {
 
 
     /**
+     * 下载文件
      */
     @route.get()
     @route.noAuth()
@@ -51,6 +55,10 @@ export class FileController {
     }
 
 
+    /**
+     * 上传文件
+     * @param dat 
+     */
     @route.multipart(form => {
         form.hash = "md5";
         form.uploadDir = dfv.getTemp()
@@ -88,6 +96,7 @@ export class FileController {
         fi.md5 = dat.file.hash!;
         fi.name = dat.file.name;
         fi.uid = user.uid;
+        fi.size = dat.file.size;
         let res = await db.dfv_file().insert(fi);
         return {
             fid: fi.fid,

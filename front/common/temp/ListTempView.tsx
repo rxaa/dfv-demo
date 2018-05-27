@@ -5,6 +5,7 @@ import { dfvFront, InputType, LocalName } from "dfv/src/public/dfvFront";
 import { dfvBind } from "dfv/src/public/dfvBind";
 import { frontCfg } from "../../../config/frontCfg";
 import { com } from "../../../lib/com";
+import { LayDateDfv } from "../component/LayDate";
 
 
 export class ListTempView<T, T2> {
@@ -53,7 +54,7 @@ export class ListTempView<T, T2> {
     addTemp = async (ins: T2, insertView: any) => com.isMobile() ?
         <div style={"min-width:130px"} class=" pad5">
             {
-                await this.getEditFields(ins, this.temp.cfg.addFieldMap, 0)
+                await this.getEditFields(ins, this.temp.cfg.addFieldMap, 0, true)
             }
             {insertView}
             <button class="button_green pad6-12"
@@ -65,7 +66,7 @@ export class ListTempView<T, T2> {
         <div style={"min-width:200px"} class="pad10">
             <table cellPadding="5">
                 {
-                    await this.getEditFields(ins, this.temp.cfg.addFieldMap, 0)
+                    await this.getEditFields(ins, this.temp.cfg.addFieldMap, 0, true)
                 }
                 {insertView}
                 <tr>
@@ -122,34 +123,27 @@ export class ListTempView<T, T2> {
 
     dateTitle = "日期：";
 
-    dateFrom: HTMLInputElement;
-    dateTo: HTMLInputElement;
+
+    dateFrom = new LayDateDfv();
+    dateTo = new LayDateDfv();
     dateInput = () =>
         <div>
             {this.dateTitle}
-            {this.dateFrom = <input type="text" name="max_time" id={this.temp.uniqueId + "date_from"}
-                class="txt_blue" readOnly={true} style="width:100px;"
-            />}
+            {this.dateFrom.render({
+                style: "width:95px;",
+            })}
             -
-            {this.dateTo = <input type="text" name="min_time" id={this.temp.uniqueId + "date_to"}
-                class="txt_blue" readOnly={true} style="width:100px;"
-            />}
+            {this.dateTo.render({
+                style: "width:95px;",
+            })}
             {
                 this.initDate()
             }
         </div>
 
     private initDate() {
-        laydate.render({
-            elem: this.dateFrom,
-            done: (d, date) => this.temp.dat.dateFrom = d,
-            theme: frontCfg.mainColor,
-        });
-        laydate.render({
-            elem: this.dateTo,
-            done: (d, date) => this.temp.dat.dateTo = d,
-            theme: frontCfg.mainColor
-        })
+        this.dateFrom.onSelected = (d) => this.temp.dat.dateFrom = d;
+        this.dateTo.onSelected = (d) => this.temp.dat.dateTo = d;
     }
 
     buttonClear: HTMLButtonElement;
@@ -292,8 +286,9 @@ export class ListTempView<T, T2> {
                 <tr>
                     <th width="25">
                         {this.temp.selectMode ? null :
-                            <input type="checkbox" onclick={() => this.checkAll()}
-                                checked={dfvBind(e => this.temp.dat.checkAll)} />}
+                            <input type="checkbox"
+                                onclick={() => this.checkAll()}
+                            />}
                     </th>
                     {
                         this.temp.cfg.showFieldList.map(it =>
@@ -373,7 +368,7 @@ export class ListTempView<T, T2> {
                         }
                     </div>
                 }
-                  <div class="flex-row x-center mar10t">
+                <div class="flex-row x-center mar10t">
                     <button className="button_white pad4-10" onclick={() => this.temp.firstPage()}>
                         首页
                     </button>
@@ -405,11 +400,12 @@ export class ListTempView<T, T2> {
      * @param currentTarget
      */
     checkAll() {
+        this.temp.dat.checkAll = !this.temp.dat.checkAll;
         for (let i = 0; i < this.tableBody.children.length; i++) {
             let row = this.tableBody.children[i] as HTMLTableRowElement;
             dfvFront.eachElement(row, (checkBox: HTMLInputElement) => {
                 if (checkBox.localName == LocalName.input && checkBox.type == InputType.checkbox) {
-                    checkBox.checked = this.temp.dat.checkAll != true;
+                    checkBox.checked = this.temp.dat.checkAll;
                     return false;
                 }
                 return true;
@@ -486,6 +482,25 @@ export class ListTempView<T, T2> {
     }
 
 
+    private newLine(title: HTMLElement | string, body: HTMLElement | string): HTMLElement {
+        if (com.isMobile()) {
+            return (
+                <div class=" mar10b">
+                    <div>{title}</div>
+                    <div>{body}</div>
+                </div>)
+        }
+        else {
+            return (
+                <tr>
+                    <td>{title}</td>
+                    <td>
+                        {body}
+                    </td>
+                </tr>)
+        }
+    }
+
     /**
      * 获取编辑字段列表
      * @param dat
@@ -493,7 +508,7 @@ export class ListTempView<T, T2> {
      * @param index
      * @returns {Promise<any[]>}
      */
-    async getEditFields(dat: T | T2, fs: MapString<IListEdit<T | T2>>, index: number) {
+    async getEditFields(dat: T | T2, fs: MapString<IListEdit<T | T2>>, index: number, add?: boolean) {
         let ret = Array();
 
         for (let k in fs) {
@@ -511,7 +526,7 @@ export class ListTempView<T, T2> {
                 dat: dat,
                 dom: null,
                 isEditAll: true,
-                isAdd: true,
+                isAdd: !!add,
                 index: index,
                 field: k,
                 value: dat[k],
@@ -523,23 +538,7 @@ export class ListTempView<T, T2> {
             if (e.dom == null)
                 continue;
 
-            if (com.isMobile()) {
-                ret.push(
-                    <div class=" mar10b">
-                        <div>{title}:</div>
-                        <div>{e.dom}</div>
-                    </div>)
-            }
-            else {
-                ret.push(
-                    <tr>
-                        <td>{title}:</td>
-                        <td>
-                            {e.dom}
-                        </td>
-                    </tr>)
-            }
-
+            ret.push(this.newLine(title + ":", e.dom));
         }
         return ret;
     }

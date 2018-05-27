@@ -23,7 +23,7 @@ const dbSelectCfg = [
     {
         select: [dfv_file_1.dfv_file, dfv_userCfg],
         update: [dfv_fileCfg],
-        delete: [dfv_fileCfg],
+        delete: [],
         insert: [dfv_file_1.dfv_file, dfv_user_1.dfv_user],
     },
     /**

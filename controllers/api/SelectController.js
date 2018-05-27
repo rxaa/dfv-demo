@@ -22,7 +22,7 @@ const DbAuthController_1 = require("../DbAuthController");
  */
 class SelectController {
     async del(dat) {
-        let s = db_1.db[dat.table];
+        let s = db_1.db[dat.table]();
         if (!s) {
             throw dfv_2.dfv.err("无此表");
         }
@@ -47,7 +47,7 @@ class SelectController {
         return { res: res };
     }
     async insert(dat) {
-        let s = db_1.db[dat.table];
+        let s = db_1.db[dat.table]();
         if (!s) {
             throw dfv_2.dfv.err("无此表");
         }
@@ -67,7 +67,7 @@ class SelectController {
         return { res: res };
     }
     async update(dat) {
-        let s = db_1.db[dat.table];
+        let s = db_1.db[dat.table]();
         if (!s) {
             throw dfv_2.dfv.err("无此表");
         }
@@ -102,7 +102,7 @@ class SelectController {
         return { res: res };
     }
     async count(dat) {
-        let s = db_1.db[dat.table];
+        let s = db_1.db[dat.table]();
         if (!s) {
             throw dfv_2.dfv.err("无此表");
         }
@@ -128,7 +128,7 @@ class SelectController {
         return { res: res };
     }
     async list(dat) {
-        let s = db_1.db[dat.table];
+        let s = db_1.db[dat.table]();
         if (!s) {
             throw dfv_2.dfv.err("无此表");
         }

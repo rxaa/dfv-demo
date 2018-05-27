@@ -1,3 +1,4 @@
+import { Page } from './../lib/Page';
 import { IOnRouteParas } from "dfv/src/control/dfvController";
 import { dfvLog, route } from "dfv";
 import { viewLayout } from "../views/viewLayout";
@@ -35,8 +36,11 @@ export class RouteController {
 
         //获取用户信息并缓存
         let user = (await db.dfv_user().cacheGetInt(parseInt(para.uid)))[0];
-        if (!user || user.token != para.token_) {
-            throw dfv.err("未登陆1")
+        if (!user) {
+            throw dfv.err("未登录1")
+        }
+        if (user.token != para.token_) {
+            throw dfv.err("登录失效，请<a href='javascript:mana.unLogin();'>重新登录</a>！");
         }
 
         //填充用户信息

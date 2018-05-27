@@ -37,9 +37,15 @@ class dfv_user {
          */
         this.auth = 0;
         /**
+         * 头像
+         */
+        this.img = 0;
+        this.intro = "";
+        /**
          * 登陆时间
          */
-        this.login_time = 0;
+        this.login_time = Date.now();
+        this.reg_time = Date.now();
         /**
          * 访问令牌
          */
@@ -48,11 +54,21 @@ class dfv_user {
          *
          */
         this.salt = "";
+        this.state = 0;
+        /**
+         * token生成时间
+         */
+        this.token_time = 0;
     }
 }
+dfv_user.autoStr = ["普通用户", "编辑", "管理员"];
+dfv_user.authNormal = 0;
+dfv_user.authEditor = 1;
+dfv_user.authAdmin = 2;
 __decorate([
     sql_1.sql.primaryKey,
     sql_1.sql.autoIncrement,
+    sql_1.sql.cacheId,
     __metadata("design:type", Number)
 ], dfv_user.prototype, "uid", void 0);
 exports.dfv_user = dfv_user;

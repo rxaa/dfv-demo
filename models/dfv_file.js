@@ -32,12 +32,17 @@ class dfv_file {
          *
          */
         this.name = "";
+        /**
+         * 文件大小字节
+         */
+        this.size = 0;
         this.uid = 0;
     }
 }
 __decorate([
     sql_1.sql.primaryKey,
     sql_1.sql.autoIncrement,
+    sql_1.sql.cacheId,
     __metadata("design:type", Number)
 ], dfv_file.prototype, "fid", void 0);
 exports.dfv_file = dfv_file;

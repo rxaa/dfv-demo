@@ -63,12 +63,6 @@ tt {
     vertical-align: middle;
 }
 
-q {
-    display: inline-block;
-    vertical-align: middle;
-    quotes: none;
-    text-indent: 0px;
-}
 
 hr {
     height: 1px;
@@ -491,7 +485,6 @@ a {
 }
 
 a:visited {
-    color: #00a0e9;
     text-decoration: none;
 }
 
@@ -526,30 +519,7 @@ a:hover {
 .bor3l {
     border-left: 3px #00a0e9 solid;
 }
-.pager {
-    color: #00a0e9;
-    background-color: #FFF;
-    padding: 6px 9px;
-    text-decoration: none;
-    border-right: 1px solid #CCC;
-    border-bottom: 1px solid #CCC;
-    border-radius: 5px;
-}
 
-.pager:hover {
-    border-right: none;
-    border-bottom: none;
-    border-top: 1px solid #CCC;
-    border-left: 1px solid #CCC;
-    cursor: pointer;
-}
-
-.current {
-    padding: 6px 9px;
-    color: #fff;
-    background: #00a0e9;
-    border-radius: 5px;
-}
 
 .flex {
     display: flex;
@@ -643,7 +613,7 @@ a:hover {
 
 .yellow_msg,
 .back_yellow {
-    background-color: lightYellow;
+    background-color: #fcf8e3;
 }
 
 .back_green {
@@ -728,7 +698,6 @@ a:hover {
 
 .hide {
     width: 0px;
-
 }
 
 .hidden {

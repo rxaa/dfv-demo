@@ -3,25 +3,15 @@ import { RichText } from "../common/temp/RichText"
 
 export class HomeIndex {
 
-    editor = new RichText();
 
     constructor() {
-        this.editor.onInit = () => {
-            this.editor.addToolBarItem(<a href="###" >全屏</a>);
-            this.editor.setHtml("初始化测试");
-        }
+
     }
 
     render() {
-        return <div>
-            富文本测试：
-            {
-                this.editor.render({
-                    style: {
-                        width: "100%"
-                    }
-                })
-            }
+        return <div class="pad10">
+            <p class="back_yellow pad10">欢迎来到首页！</p>
+            <a class="pad10 back_green" href="/manage">后台管理</a>
         </div>
     }
 }

@@ -9,6 +9,7 @@ export class dfv_file {
      */
     @sql.primaryKey
     @sql.autoIncrement
+    @sql.cacheId
     fid: number = 0;
 
     /**
@@ -30,6 +31,11 @@ export class dfv_file {
      * 
      */
     name: string = "";
+
+    /**
+     * 文件大小字节
+     */
+    size = 0;
 
     uid = 0;
 

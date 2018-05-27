@@ -204,7 +204,7 @@ export class AjaxRequest<T> {
     sendForm(form: FormData): this {
         if (this.paraObj) {
             for (let key in this.paraObj) {
-                form.set(key, this.paraObj[key]);
+                form.append(key, this.paraObj[key]);
             }
         }
         this.formData = form;

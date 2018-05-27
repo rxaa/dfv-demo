@@ -21,7 +21,7 @@ class RichText {
     }
     initDiv(ele) {
         var E = window.wangEditor;
-        if (E === undefined) {
+        if (E === undefined || !this.dom.parentElement) {
             //异步加载，需要多次尝试
             setTimeout(() => {
                 this.initDiv(ele);
@@ -123,7 +123,7 @@ class RichText {
                     '👌', '❤', '😱', '😎',]
             }
         ];
-        this.editor.customConfig.uploadImgServer = '/file/upload';
+        this.editor.customConfig.uploadImgServer = frontCfg_1.frontCfg.apiUploadFile;
         this.editor.customConfig.uploadFileName = 'file';
         // this.editor.customConfig.customAlert = function (info) {
         //     // info 是需要提示的内容

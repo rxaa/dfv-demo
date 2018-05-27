@@ -372,7 +372,7 @@ export class ListTemp<T, T2> {
 
         let wind = new dfvWindow();
         wind.addCover();
-        wind.showWithOk(`<b>${title}:</b>`, showValue, async (pop) => {
+        wind.showWithOk(`<b>${title}:</b>`, showValue, (pop) => {
             wind.close();
         });
     }
@@ -673,9 +673,9 @@ export class ListTemp<T, T2> {
         this.dat.dateFrom = "";
         this.dat.dateTo = "";
         if (this.view.dateTo)
-            this.view.dateTo.value = "";
+            this.view.dateTo.setDate("");
         if (this.view.dateFrom)
-            this.view.dateFrom.value = "";
+            this.view.dateFrom.setDate("");
         this.firstPage();
         // this.view.buttonClear.style.display = "hide";
     }
@@ -773,7 +773,7 @@ export class ListTemp<T, T2> {
                 dat: dat,
                 dom: null,
                 isEditAll: true,
-                isAdd: true,
+                isAdd: false,
                 index: 0,
                 field: k,
                 value: dat[k],
@@ -868,13 +868,6 @@ export class ListTemp<T, T2> {
         });
     }
 
-    /**
-     * 字串编辑字段
-     * @param validEdit
-     */
-    editText(validEdit?: (val: any, dat: T) => any) {
-        return new TempTextEdit(validEdit);
-    }
 
     render() {
         this.onStart();

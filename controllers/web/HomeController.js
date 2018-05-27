@@ -17,11 +17,16 @@ const viewHome_1 = require("../../views/viewHome");
 const sys_1 = require("../../lib/sys");
 let HomeController = class HomeController {
     /**
-     * url为 /
+     * 首页
      */
     async index() {
-        //返回值作为response body
         return viewHome_1.viewHome.index();
+    }
+    /**
+    * 后台管理
+    */
+    manage() {
+        return viewHome_1.viewHome.manage();
     }
     async install() {
         await db_1.db.connecter.updatePromise(`CREATE TABLE dfv_file  (
@@ -30,20 +35,26 @@ let HomeController = class HomeController {
             add_date bigint(20) NOT NULL DEFAULT 0,
             md5 varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
             name varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+            \`size\` bigint(20) NOT NULL DEFAULT 0 COMMENT '文件大小字节',
             \`uid\` bigint(20) NOT NULL DEFAULT 0,
             PRIMARY KEY (fid) USING BTREE,
             INDEX add_date(add_date) USING BTREE
           ) ENGINE = InnoDB  CHARACTER SET = utf8;`);
         await db_1.db.connecter.updatePromise(` CREATE TABLE dfv_user  (
-            uid int(10) NOT NULL AUTO_INCREMENT,
+            uid bigint(20) NOT NULL AUTO_INCREMENT,
             id varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '账号',
             password varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码md5+salt',
             email varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
             ip varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
             auth int(10) NOT NULL DEFAULT 0 COMMENT '0.普通用户 1.编辑 2.管理员',
+            \`img\` bigint(20) NOT NULL DEFAULT 0 COMMENT '头像文件',
+            \`intro\` text NULL COMMENT '简介',
+            reg_time bigint(20) NOT NULL DEFAULT 0 COMMENT '注册时间',
             login_time bigint(20) NOT NULL DEFAULT 0 COMMENT '登陆时间',
-            token varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '访问令牌',
             salt varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+            \`state\` int(11) NOT NULL DEFAULT 0 COMMENT '用户状态，0.正常 1.删除',
+            token varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '访问令牌',
+            \`token_time\` bigint(20) NOT NULL DEFAULT 0 COMMENT 'token生成时间',
             PRIMARY KEY (\`uid\`) USING BTREE,
             UNIQUE INDEX \`id\`(\`id\`) USING BTREE,
             INDEX \`login_time\`(\`login_time\`) USING BTREE
@@ -64,6 +75,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], HomeController.prototype, "index", null);
+__decorate([
+    dfv_2.route.get(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], HomeController.prototype, "manage", null);
 __decorate([
     dfv_2.route.get(),
     __metadata("design:type", Function),

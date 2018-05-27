@@ -6,10 +6,11 @@ export class TempTextEdit<T> implements IListEdit<T> {
 
 
     /**
-     *
-     * @param validEdit  验证函数
+     * 
+     * @param validEdit 验证函数
+     * @param password 是否作为密码输入框
      */
-    constructor(public validEdit?: (val: any, dat: T) => any) {
+    constructor(public validEdit?: (val: any, e: IListEditData<T>) => any, public password?: boolean) {
 
     }
 
@@ -22,10 +23,15 @@ export class TempTextEdit<T> implements IListEdit<T> {
             e.dom =
                 <div class="flex-row y-center">
                     {this.text =
-                        <textarea class="txt_blue" style={{ width: "100%" }}
-                            onblur={ev => this.onValid(e)}>
-                            {e.funcValue}
-                        </textarea>
+                        this.password ?
+                            <input type="password" class="txt_blue" style={{ width: "100%" }}
+                                onblur={ev => this.onValid(e)}>
+                            </input>
+                            :
+                            <textarea class="txt_blue" style={{ width: "100%" }}
+                                onblur={ev => this.onValid(e)}>
+                                {e.funcValue}
+                            </textarea>
                     }
                     {this.info = <span class="red" />}
                 </div>
@@ -34,9 +40,14 @@ export class TempTextEdit<T> implements IListEdit<T> {
             e.dom =
                 <div class="flex-col y-center">
                     {this.text =
-                        <textarea class="txt_blue" style={{ width: "180px", height: "80px" }}>
-                            {e.funcValue}
-                        </textarea>
+                        this.password ?
+                            <input type="password" class="txt_blue" style={{ width: "180px", height: "80px" }}
+                                onblur={ev => this.onValid(e)}>
+                            </input>
+                            :
+                            <textarea class="txt_blue" style={{ width: "180px", height: "80px" }}>
+                                {e.funcValue}
+                            </textarea>
                     }
                     {this.info = <span class="red" />}
                 </div>
@@ -46,13 +57,12 @@ export class TempTextEdit<T> implements IListEdit<T> {
             }, 0);
         }
 
-
     }
 
     async onValid(e: IListEditData<T>) {
         try {
             if (this.validEdit)
-                e.dat[e.field] = await this.validEdit(this.text.value, e.dat);
+                e.dat[e.field] = await this.validEdit(this.text.value, e);
             else
                 e.dat[e.field] = this.text.value;
 

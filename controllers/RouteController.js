@@ -25,8 +25,11 @@ class RouteController {
             para = dat.ctx.multipart.fields;
         //获取用户信息并缓存
         let user = (await db_1.db.dfv_user().cacheGetInt(parseInt(para.uid)))[0];
-        if (!user || user.token != para.token_) {
-            throw dfv_2.dfv.err("未登陆1");
+        if (!user) {
+            throw dfv_2.dfv.err("未登录1");
+        }
+        if (user.token != para.token_) {
+            throw dfv_2.dfv.err("登录失效，请<a href='javascript:mana.unLogin();'>重新登录</a>！");
         }
         //填充用户信息
         dat.ctx.request[__userInfo__] = {

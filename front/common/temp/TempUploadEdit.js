@@ -52,19 +52,20 @@ class TempUploadEdit {
     onUpload() {
         let dis = new AjaxRequest_1.FileSelectDialog();
         dis.setFileAccept(AjaxRequest_1.FileSelectDialog.imageType);
-        dis.onSelectFile = async (fi) => {
+        dis.onSelectFile = (fi) => {
             let form = new FormData();
-            form.set("file", fi);
+            form.append("file", fi);
             let req = apiCRUD_1.apiCRUD.upload(form).showProgress(false);
             dfvFront_1.dfvFront.setEle(this.cont, this.prog);
             //显示上传进度
             req.onSendProg = e => {
                 this.prog.innerHTML = (e.loaded * 99 / e.total).toFixed(1) + "%";
             };
-            let res = await req.resp();
-            this.pic = res.fid;
-            this.img.src = this.getSrc();
-            dfvFront_1.dfvFront.setEle(this.cont, this.img);
+            req.resp().then(res => {
+                this.pic = res.fid;
+                this.img.src = this.getSrc();
+                dfvFront_1.dfvFront.setEle(this.cont, this.img);
+            });
         };
         dis.show();
     }
