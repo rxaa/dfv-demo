@@ -16,6 +16,7 @@ const db_1 = require("../../models/db");
 const dfv_2 = require("dfv/src/public/dfv");
 const FileUploadReq_1 = require("../../models/FileUploadReq");
 const path = require("path");
+const com_1 = require("../../lib/com");
 class FileController {
     /**
      * 文件上传目录
@@ -66,6 +67,7 @@ class FileController {
         if (!user) {
             throw dfv_2.dfv.err("缺少用户信息");
         }
+        dat.file.name = com_1.com.xssStr(dat.file.name);
         let d = new Date();
         let time = d.getFullYear() + "/" + d.getMonth() + "/" + d.getDay() + "/";
         let menu = FileController.fileMenu() + "/" + time;

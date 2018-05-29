@@ -1,3 +1,4 @@
+import { sys } from './../../lib/sys';
 import { RouteController } from './../RouteController';
 import { dfv_file } from './../../models/dfv_file';
 import { dfvContext, dfvFile, dfvLog, route } from "dfv";
@@ -7,6 +8,7 @@ import { valid } from "dfv/src/public/valid";
 import { FileReq, UploadReq } from "../../models/FileUploadReq";
 import * as path from "path"
 import { UploadRes } from "../../front/common/temp/SelectReq";
+import { com } from '../../lib/com';
 
 
 export class FileController {
@@ -79,6 +81,7 @@ export class FileController {
             throw dfv.err("缺少用户信息");
         }
 
+        dat.file.name = com.xssStr(dat.file.name);
 
         let d = new Date();
 

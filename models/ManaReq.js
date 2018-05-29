@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const com_1 = require("./../lib/com");
 const dfv_1 = require("dfv/src/public/dfv");
 const valid_1 = require("dfv/src/public/valid");
 class LoginReq {
@@ -25,11 +26,11 @@ class LoginReq {
     }
 }
 __decorate([
-    valid_1.valid.stringNotEmpty(null, "账号不能为空！"),
+    valid_1.valid.stringNotEmpty(f => com_1.com.xss(f), "账号不能为空！"),
     __metadata("design:type", Object)
 ], LoginReq.prototype, "id", void 0);
 __decorate([
-    valid_1.valid.stringNotEmpty(null, "密码不能为空！"),
+    valid_1.valid.stringNotEmpty(f => com_1.com.xss(f), "密码不能为空！"),
     __metadata("design:type", Object)
 ], LoginReq.prototype, "psw", void 0);
 exports.LoginReq = LoginReq;
