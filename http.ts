@@ -1,6 +1,7 @@
-import { dfvLib, dfvLog, route } from "dfv";
+import { dfvLib } from "dfv";
 dfvLib.init(__dirname);
 
+import { dfvLog, route } from "dfv";
 import * as https from 'https';
 import * as http from 'http';
 import * as net from "net";

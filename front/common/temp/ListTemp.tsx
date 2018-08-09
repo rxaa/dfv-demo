@@ -8,6 +8,8 @@ import { valid } from "dfv/src/public/valid";
 import { dfvFront, InputType, LocalName } from "dfv/src/public/dfvFront";
 import { dfvWindow } from "dfv/src/public/dfvWindow";
 import { DbSession } from "../db/DbSession";
+import { DbField } from "../db/DbField";
+import { ISqlSelectField } from "dfv/src/db/ISqlField";
 
 
 /**
@@ -92,6 +94,13 @@ export class ListTemp<T, T2> {
         this.req.old = 1;
     }
 
+
+    /**
+     * 判断view是否有效
+     */
+    isActivite() {
+        return this.rootView.parentNode != null;
+    }
 
     /**
      * 开启list item选择模式，否则为批量删除
@@ -354,6 +363,7 @@ export class ListTemp<T, T2> {
                     where: [],
                 }).resp();
 
+                this.onEditSuccess(dat);
                 this.refreshList();
 
                 wind.close();
@@ -566,7 +576,9 @@ export class ListTemp<T, T2> {
         return list;
     }
 
+    async onDeleteSuccess(dels: { dat: T, index: number }[]) {
 
+    }
     /**
      * 删除行
      * @param dels
@@ -589,6 +601,7 @@ export class ListTemp<T, T2> {
                 this.dat.count -= dels.length;
                 this.countPage()
 
+                this.onDeleteSuccess(dels);
                 //倒序删除索引不错位
                 // dels.sort((l, r) => r.index - l.index);
                 // dels.forEach(r => {
@@ -787,7 +800,7 @@ export class ListTemp<T, T2> {
             return;
 
         let priId = dat[this.primaryKeyName];
-        let dbSet = new DbSession(this.tableName);
+        let dbSet = new DbSession<any>(this.tableName);
 
         for (let k in dat) {
             if (k == this.primaryKeyName || dat[k] instanceof Function)
@@ -823,6 +836,11 @@ export class ListTemp<T, T2> {
             return false;
         }
         return true;
+    }
+
+
+    async onInsertSuccess(edit: T2) {
+
     }
 
     /**
@@ -863,15 +881,18 @@ export class ListTemp<T, T2> {
                 this.popAddWindow.close();
                 this.popAddWindow = null;
             }
+            this.onInsertSuccess(ins);
 
             this.firstPage();
         });
     }
 
 
+    rootView: HTMLDivElement;
     render() {
         this.onStart();
-        return this.view.render();
+        this.rootView = this.view.render();
+        return this.rootView;
     }
 
 }

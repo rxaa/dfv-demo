@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const dfv_1 = require("dfv");
 dfv_1.dfvLib.init(__dirname);
+const dfv_2 = require("dfv");
 const http = require("http");
 const express = require("express");
 const morgan = require("morgan");
@@ -18,7 +19,7 @@ const RouteController_1 = require("./controllers/RouteController");
 //定时任务
 Tasks_1.Tasks.startAll();
 if (cfg.isProduction) {
-    dfv_1.dfvLog.enableConsole = false;
+    dfv_2.dfvLog.enableConsole = false;
 }
 else {
     /**
@@ -36,7 +37,7 @@ app.disable('x-powered-by');
 app.use(morgan('short', {
     stream: {
         write: function (str) {
-            dfv_1.dfvLog.write(str, null, dfv_1.dfvLog.getCutFile("access.log"));
+            dfv_2.dfvLog.write(str, null, dfv_2.dfvLog.getCutFile("access.log"));
         }
     },
 }));
@@ -54,12 +55,12 @@ app.use(cookieParser("dsqikmnfhtlp"));
  * 未处理的Promise Rejection
  */
 process.on('unhandledRejection', function (error, promise) {
-    dfv_1.dfvLog.write("unhandled Rejection:", error);
+    dfv_2.dfvLog.write("unhandled Rejection:", error);
 });
 /**
  * 加载controllers
  */
-dfv_1.route.load(app, [
+dfv_2.route.load(app, [
     {
         menu: path.join(__dirname, 'controllers', 'web'),
         onRoute: RouteController_1.RouteController.onRoute(void 0, true),
@@ -90,7 +91,7 @@ app.use(function responser(req, resp, next) {
 });
 //错误处理
 function errorHandler(err, req, res, next) {
-    dfv_1.dfvLog.write(req.url + " " + req.ip + " errorHandler", err);
+    dfv_2.dfvLog.write(req.url + " " + req.ip + " errorHandler", err);
     res.status(500);
     res.end("网络异常");
 }

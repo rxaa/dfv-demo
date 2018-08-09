@@ -161,6 +161,7 @@ class ListTemp {
                         table: dfv_1.dfv.getFuncName(this.tableName),
                         where: [],
                     }).resp();
+                    this.onEditSuccess(dat);
                     this.refreshList();
                     wind.close();
                 });
@@ -317,6 +318,12 @@ class ListTemp {
     setOrderAsc() {
         this.orderDesc = false;
         this.req.old = 1;
+    }
+    /**
+     * 判断view是否有效
+     */
+    isActivite() {
+        return this.rootView.parentNode != null;
     }
     /**
      * 设置主键与次键（先按次键排序，重复再按主键排序）
@@ -549,6 +556,8 @@ class ListTemp {
         }
         return list;
     }
+    async onDeleteSuccess(dels) {
+    }
     /**
      * 删除行
      * @param dels
@@ -571,6 +580,7 @@ class ListTemp {
                 ListTemp.addDelLog(this.getColumSting(dels));
                 this.dat.count -= dels.length;
                 this.countPage();
+                this.onDeleteSuccess(dels);
                 //倒序删除索引不错位
                 // dels.sort((l, r) => r.index - l.index);
                 // dels.forEach(r => {
@@ -643,6 +653,8 @@ class ListTemp {
         }
         return true;
     }
+    async onInsertSuccess(edit) {
+    }
     /**
      * 插入点击事件
      * @param ins
@@ -676,12 +688,14 @@ class ListTemp {
                 this.popAddWindow.close();
                 this.popAddWindow = null;
             }
+            this.onInsertSuccess(ins);
             this.firstPage();
         });
     }
     render() {
         this.onStart();
-        return this.view.render();
+        this.rootView = this.view.render();
+        return this.rootView;
     }
 }
 exports.ListTemp = ListTemp;
