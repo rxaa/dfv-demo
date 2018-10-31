@@ -10,9 +10,5 @@
 		"**/*.js.map": true
 		// "node_modules": true,
 		// "runtime": true
-	},
-	"tsimporter.filesToExclude": [
-		"runtime",
-		"node_modules"
-	]
+	}
 }

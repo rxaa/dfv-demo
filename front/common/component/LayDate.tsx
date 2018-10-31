@@ -11,7 +11,7 @@ export class LayDateDfv {
             var script = document.createElement("script");
             script.async = false;  // 关闭异步加载，不是所有浏览都支持
             script.setAttribute('src', frontCfg.layDatePath);
-            document.head.appendChild(script);
+            document.head!.appendChild(script);
 
             LayDateDfv.hasLoad = true;
         }

@@ -27,11 +27,11 @@ if (cfg.isProduction) {
 }
 else {
     /**
-     * 生成mysql model至/runtime/models
+     * 生成mysql model
      */
     mysqlModel.generate();
     /**
-     * 生成接口文件至/runtime/template
+     * 生成接口说明文档至/runtime/template
      */
     ApiDoc.generate(true);
 }

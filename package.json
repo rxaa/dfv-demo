@@ -8,29 +8,27 @@
     "email": "zyxdde@gmail.com"
   },
   "dependencies": {
-    "agentkeepalive": "^3.4.1",
+    "agentkeepalive": "^3.5.2",
     "body-parser": "^1.18.3",
-    "chokidar": "^1.7.0",
-    "compression": "^1.7.2",
+    "chokidar": "^2.0.4",
+    "compression": "^1.7.3",
     "cookie-parser": "^1.4.3",
-    "dfv": "^0.3.13",
-    "express": "^4.16.3",
-    "method-override": "^2.3.10",
-    "mongodb": "^2.2.35",
-    "morgan": "^1.9.0",
-    "mysql": "^2.15.0",
-    "xss": "^0.3.8"
+    "dfv": "^0.4.1",
+    "express": "^4.16.4",
+    "method-override": "^3.0.0",
+    "morgan": "^1.9.1",
+    "mysql": "^2.16.0",
+    "xss": "^1.0.3"
   },
   "devDependencies": {
     "@types/body-parser": "^1.17.0",
     "@types/cookie-parser": "^1.4.1",
-    "@types/cookies": "^0.7.0",
+    "@types/cookies": "^0.7.1",
     "@types/express": "^4.16.0",
     "@types/formidable": "^1.0.31",
-    "@types/mocha": "^2.2.48",
-    "@types/mongodb": "^2.2.14",
-    "@types/mysql": "^0.0.34",
-    "@types/node": "^8.10.19"
+    "@types/mocha": "^5.2.5",
+    "@types/mysql": "^2.15.5",
+    "@types/node": "^8.10.36"
   },
   "engines": {
     "node": ">= 6.9.0"

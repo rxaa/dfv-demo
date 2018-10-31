@@ -12,7 +12,7 @@ import { TestReq1 } from '../models/TestReq1';
 /**
  * 前端数据库访问权限配置
  * 
- * 只能操作用户自己相关的数据
+ * 只能操作用户自己相关uid的数据
  */
 const dfv_fileCfg = table(dfv_file, (db, dat) => db.and(f => f.uid.eq(dat.uid)));
 const dfv_userCfg = table(dfv_user, (db, dat) => db.and(f => f.uid.eq(dat.uid)));

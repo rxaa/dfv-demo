@@ -24,7 +24,7 @@ class TempSelectEdit {
         e.dom =
             React.createElement("div", { class: "flex-row y-center pad3" },
                 this.selec =
-                    React.createElement("select", { class: "txt_blue", style: { width: "100%" } }, list),
+                    React.createElement("select", { onchange: ev => this.onValid(e), class: "txt_blue", style: { width: "100%" } }, list),
                 this.info = React.createElement("span", { class: "red" }));
     }
     async onValid(e) {

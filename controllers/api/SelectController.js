@@ -189,35 +189,30 @@ class SelectController {
     }
 }
 __decorate([
-    dfv_1.route.comment("通用删除接口", "", {}),
     dfv_1.route.all(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [SelectReq_1.SelectDelReq]),
     __metadata("design:returntype", Promise)
 ], SelectController.prototype, "del", null);
 __decorate([
-    dfv_1.route.comment("通用插入接口", "", {}),
     dfv_1.route.all(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [SelectReq_1.SelectInsertReq]),
     __metadata("design:returntype", Promise)
 ], SelectController.prototype, "insert", null);
 __decorate([
-    dfv_1.route.comment("通用更新接口", "", {}),
     dfv_1.route.all(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [SelectReq_1.SelectUpdateReq]),
     __metadata("design:returntype", Promise)
 ], SelectController.prototype, "update", null);
 __decorate([
-    dfv_1.route.comment("通用列表count接口", "", {}),
     dfv_1.route.all(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [SelectReq_1.SelectCountReq]),
     __metadata("design:returntype", Promise)
 ], SelectController.prototype, "count", null);
 __decorate([
-    dfv_1.route.comment("通用列表查询接口", "", new ListResp_1.ListResp),
     dfv_1.route.all(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [SelectReq_1.SelectReq]),

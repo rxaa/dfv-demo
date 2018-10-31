@@ -14,7 +14,7 @@ export class RichText {
             var script = document.createElement("script");
             script.async = false;  // 关闭异步加载，不是所有浏览都支持
             script.setAttribute('src', frontCfg.wangEditorPath);
-            document.head.appendChild(script);
+            document.head!.appendChild(script);
             RichText.hasLoad = true;
         }
     }

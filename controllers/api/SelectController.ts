@@ -24,7 +24,6 @@ export class SelectController {
     ctx!: dfvContext;
 
 
-    @route.comment("通用删除接口", "", {})
     @route.all()
     async del(dat: SelectDelReq) {
         let s = db[dat.table]() as SqlBuilder<any>;
@@ -60,7 +59,6 @@ export class SelectController {
     }
 
 
-    @route.comment("通用插入接口", "", {})
     @route.all()
     async insert(dat: SelectInsertReq) {
         let s = db[dat.table]() as SqlBuilder<any>;
@@ -88,7 +86,6 @@ export class SelectController {
         return { res: res };
     }
 
-    @route.comment("通用更新接口", "", {})
     @route.all()
     async update(dat: SelectUpdateReq) {
         let s = db[dat.table]() as SqlBuilder<any>;
@@ -139,7 +136,6 @@ export class SelectController {
         return { res: res };
     }
 
-    @route.comment("通用列表count接口", "", {})
     @route.all()
     async count(dat: SelectCountReq) {
         let s = db[dat.table]() as SqlBuilder<any>;
@@ -180,7 +176,6 @@ export class SelectController {
         return { res: res };
     }
 
-    @route.comment("通用列表查询接口", "", new ListResp)
     @route.all()
     async list(dat: SelectReq) {
         let s = db[dat.table]() as SqlBuilder<any>;

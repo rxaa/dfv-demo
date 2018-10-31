@@ -7,7 +7,7 @@ const RouteController_1 = require("./RouteController");
 /**
  * 前端数据库访问权限配置
  *
- * 只能操作用户自己相关的数据
+ * 只能操作用户自己相关uid的数据
  */
 const dfv_fileCfg = table(dfv_file_1.dfv_file, (db, dat) => db.and(f => f.uid.eq(dat.uid)));
 const dfv_userCfg = table(dfv_user_1.dfv_user, (db, dat) => db.and(f => f.uid.eq(dat.uid)));

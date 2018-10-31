@@ -36,7 +36,7 @@ export class TempSelectEdit<T> implements IListEdit<T> {
         e.dom =
             <div class="flex-row y-center pad3">
                 {this.selec =
-                    <select class="txt_blue" style={{ width: "100%" }}>
+                    <select onchange={ev => this.onValid(e)} class="txt_blue" style={{ width: "100%" }}>
                         {list}
                     </select>
                 }

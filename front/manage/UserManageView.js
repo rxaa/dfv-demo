@@ -48,15 +48,17 @@ class UserManageView {
          */
         v.setEditAddFiled({
             id: mana_1.mana.string(1, 255),
-            password: new TempTextEdit_1.TempTextEdit((val, e) => {
-                if (e.isAdd && val.length < 4)
-                    throw Error("不能少于4位");
-                if (val.length == 0) {
-                    return e.dat.password;
-                }
-                e.dat.salt = dfv_1.dfv.getUniqueId16();
-                return com_1.com.hashPsw(val, e.dat.salt);
-            }, true),
+            password: new TempTextEdit_1.TempTextEdit({
+                validEdit: (val, e) => {
+                    if (e.isAdd && val.length < 4)
+                        throw Error("不能少于4位");
+                    if (val.length == 0) {
+                        return e.dat.password;
+                    }
+                    e.dat.salt = dfv_1.dfv.getUniqueId16();
+                    return com_1.com.hashPsw(val, e.dat.salt);
+                }, password: true
+            }),
             img: new TempUploadEdit_1.TempUploadEdit(),
             intro: mana_1.mana.stringRich(1),
             email: mana_1.mana.string(1, 255),

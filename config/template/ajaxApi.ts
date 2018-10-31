@@ -1,9 +1,12 @@
 import * as fs from "fs";
-import {ApiDoc} from "./html";
-import {dfv, MapString} from "dfv/src/public/dfv";
-import {FuncParse} from "dfv/src/FuncParse";
+import { ApiDoc } from "./html";
+import { dfv, MapString } from "dfv/src/public/dfv";
+import { FuncParse } from "dfv/src/FuncParse";
+import * as path from "path";
+import { mysqlModel } from "./mysqlModel";
 
 export class ajaxApi {
+    static outMenu = () => path.join(dfv.root, "front", "apiFront.ts");
 
     static imports: MapString<boolean> = {};
     static fileText = "";
@@ -23,7 +26,16 @@ export class ajaxApi {
 
             let paraType = "{}";
             if (control.info.parasType.length > 0) {
-                paraType = dfv.getFuncName(control.info.parasType[0]);
+                paraType = "";
+                for (let typeI = 0; typeI < control.info.parasType.length; typeI++) {
+                    let typeStr = dfv.getFuncName(control.info.parasType[typeI]);
+                    if (typeStr === "Number" || typeStr === "String") {
+                        typeStr = `{ ${control.info.parasName[typeI]}: ${typeStr.toLowerCase()} }`;
+                    }
+                    if (paraType.length > 0)
+                        paraType += " & ";
+                    paraType += typeStr;
+                }
             }
             let resp = apiComment.retData;
             let notPost = "false";
@@ -38,28 +50,15 @@ export class ajaxApi {
      * @param req
      */
     static ${apiName}(req: ${paraType}) {
-        return apiCRUD.ajax<${ajaxApi.getObjType(resp)}>("${control.url}").sendJSON(req, ${notPost});
+        return apiFront.ajax<${ajaxApi.getObjType(resp)}>("${control.url}").sendJSON(req, ${notPost});
     }
     
 `;
         }
 
-        //收尾
-        let apiFile = ApiDoc.codeOutMenu() + "/api.ts";
+        let [codeStart, codeEnd] = mysqlModel.readFile(ajaxApi.outMenu());
 
-        let imports = "";
-        for (let k in ajaxApi.imports) {
-            imports += k + "\r\n";
-        }
-        imports += `
-            
-export class api {
-
-${ajaxApi.fileText}
-
-}
-`;
-        fs.writeFileSync(apiFile, imports);
+        fs.writeFileSync(ajaxApi.outMenu(), codeStart + ajaxApi.fileText + codeEnd);
     }
 
 

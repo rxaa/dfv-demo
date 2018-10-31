@@ -1,36 +1,35 @@
 {
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Launch",
 			"type": "node",
 			"request": "launch",
-			"program": "${workspaceRoot}\\http.js",
-			"stopOnEntry": false,
-			"args": [],
-			"cwd": "${workspaceRoot}",
-			"preLaunchTask": null,
-			"runtimeExecutable": null,
-			"localRoot": "${workspaceRoot}",
-			"runtimeArgs": [
-				"--nolazy"
-			],
-			"env": {
-				"NODE_ENV": "development"
-			},
-			"console": "integratedTerminal",
-			"sourceMaps": true
+			"name": "http",
+			"sourceMaps": true,
+			"program": "${workspaceFolder}\\http.js",
+			"console": "internalConsole",
+			"outFiles": [
+				"${workspaceFolder}/**/*.js"
+			]
 		},
 		{
-			"name": "Attach",
 			"type": "node",
-			"request": "attach",
-			"port": 5858,
-			"address": "localhost",
-			"restart": false,
-			"sourceMaps": true,
-			"localRoot": "${workspaceRoot}",
-			"remoteRoot": null
+			"request": "launch",
+			"name": "Mocha Tests",
+			"program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+			"args": [
+				"-u",
+				"tdd",
+				"--timeout",
+				"999999",
+				"--colors",
+				"${workspaceFolder}/test"
+			],
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen"
 		}
 	]
 }

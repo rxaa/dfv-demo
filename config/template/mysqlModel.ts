@@ -1,14 +1,18 @@
 import * as fs from "fs";
 import * as path from "path";
-import {dfv} from "dfv/src/public/dfv";
-import {db} from "../../models/db";
-import {dfvFile} from "dfv";
+import { dfv } from "dfv/src/public/dfv";
+import { db } from "../../models/db";
+import { dfvFile } from "dfv";
 
 export class mysqlModel {
 
-    static outMenu = () => path.join(dfv.root, "runtime", "models");
+    static outMenu = () => path.join(dfv.root, "models");
 
     static dbClassName = () => path.join(mysqlModel.outMenu(), "db.ts");
+    static dbFrontClassName = () => path.join(mysqlModel.outMenu(), "dbFront.ts");
+
+    static codeStart = "//auto generate start//";
+    static codeEnd = "//auto generate end//";
 
     static cacheTableMap = {
         // ts_goods_pic: "gid",
@@ -20,27 +24,11 @@ export class mysqlModel {
      * @param tables
      */
     static dbClass(tables: string[]) {
-        let code = `
-import {MysqlConnecter} from "dfv/src/db/MysqlConnecter";
-import {SqlBuilder} from "dfv/src/db/SqlBuilder";
-import * as cfg from "../config/config";`;
+        let [codeStart, codeEnd] = mysqlModel.readFile(mysqlModel.dbClassName());
+
 
         for (let s of tables) {
-            code += `
-import {${s}} from "./${s}";`
-        }
-
-        code += `
-        
-export const db = {
-    /**
-     * mysql连接
-     */
-    connecter: new MysqlConnecter(cfg.mysql),
-
-`
-        for (let s of tables) {
-            code += `
+            codeStart += `
 
     /**
      *
@@ -48,10 +36,21 @@ export const db = {
     ${s}: () => new SqlBuilder(${s}, db.connecter),`
         }
 
-        code += `
-}`
 
-        fs.writeFileSync(mysqlModel.dbClassName(), code);
+        fs.writeFileSync(mysqlModel.dbClassName(), codeStart + codeEnd);
+
+        [codeStart, codeEnd] = mysqlModel.readFile(mysqlModel.dbFrontClassName());
+        for (let s of tables) {
+            codeStart += `
+
+    /**
+     *
+     */
+    ${s}: () => new DbSession(${s}),`
+        }
+
+
+        fs.writeFileSync(mysqlModel.dbFrontClassName(), codeStart + codeEnd);
     }
 
     /**
@@ -60,6 +59,12 @@ export const db = {
      * @param info
      */
     static tableClass(table: string, info: FieldInfo[]) {
+
+        //如果文件以存在,则不创建
+        let fileName = path.join(mysqlModel.outMenu(), table + ".ts");
+        if (fs.existsSync(fileName))
+            return;
+
         let code = `
 import {sql} from "dfv/src/public/sql";
 
@@ -128,7 +133,31 @@ export class ${table} {
 
 }`
 
-        fs.writeFileSync(path.join(mysqlModel.outMenu(), table + ".ts"), code);
+
+        fs.writeFileSync(fileName, code);
+    }
+
+    static readFile(path: string): [string, string] {
+        let codeStart = "";
+        let codeEnd = "";
+        let src = fs.readFileSync(path).toString();
+        let state = 0;
+        dfv.readLine(src, line => {
+            if (state == 0)
+                codeStart += line + "\r\n";
+
+            if (state == 0 && line.indexOf(mysqlModel.codeStart) >= 0)
+                state = 1;
+
+            if (state == 1 && line.indexOf(mysqlModel.codeEnd) >= 0) {
+                state = 2;
+                codeEnd += "\r\n"
+            }
+
+            if (state == 2)
+                codeEnd += line + "\r\n";
+        });
+        return [codeStart, codeEnd];
     }
 
     static getTable(name: string): string {
@@ -141,12 +170,11 @@ export class ${table} {
     }
 
 
-    static async generate(cover?: boolean) {
+    static async generate() {
 
-        if (!cover && fs.existsSync(mysqlModel.dbClassName()))
-            return;
 
-        await dfvFile.mkdirs(mysqlModel.outMenu())
+
+        //await dfvFile.mkdirs(mysqlModel.outMenu())
 
         let tables: string[] = []
         let data = await db.connecter.queryPromise("show TABLE status");

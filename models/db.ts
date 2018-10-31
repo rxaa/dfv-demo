@@ -10,7 +10,18 @@ import { dfv_user } from "./dfv_user";
 export const db = {
     connecter: new MysqlConnecter(cfg.mysql),
 
+    ////////////以下代码为自动生成,请勿修改//////////////
+    /////////////auto generate start//////////////////
+
+
+    /**
+     *
+     */
     dfv_file: () => new SqlBuilder(dfv_file, db.connecter),
 
+    /**
+     *
+     */
     dfv_user: () => new SqlBuilder(dfv_user, db.connecter),
+    /////////////auto generate end///////////////////
 }

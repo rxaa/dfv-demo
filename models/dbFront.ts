@@ -7,7 +7,18 @@ import { dfv_user } from './dfv_user';
  */
 export const dbFront = {
 
+    ////////////以下代码为自动生成,请勿修改//////////////
+    /////////////auto generate start//////////////////
+
+
+    /**
+     *
+     */
     dfv_file: () => new DbSession(dfv_file),
 
+    /**
+     *
+     */
     dfv_user: () => new DbSession(dfv_user),
+    /////////////auto generate end///////////////////
 }

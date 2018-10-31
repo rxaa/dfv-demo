@@ -5,22 +5,25 @@ const AjaxRequest_1 = require("./common/AjaxRequest");
 const ComData_1 = require("./ComData");
 const RichText_1 = require("./common/temp/RichText");
 class apiFront {
+    ////////////以下代码为自动生成,请勿修改//////////////
+    /////////////auto generate start//////////////////
     /**
-    * 后台登陆
-    *
-    * @param req
-    */
+     * 后台登陆
+     *
+     * @param req
+     */
     static manage_login(req) {
         return apiFront.ajax("/manage/login").sendJSON(req, false);
     }
     /**
-    * 删除文件
-    *
-    * @param req
-    */
+     * 删除文件
+     *
+     * @param req
+     */
     static manage_del_file(req) {
         return apiFront.ajax("/manage/del_file").sendJSON(req, false);
     }
+    /////////////auto generate end///////////////////
     static ajax(url, clas) {
         let aj = new AjaxRequest_1.AjaxRequest(url, clas);
         aj.paraObj = {

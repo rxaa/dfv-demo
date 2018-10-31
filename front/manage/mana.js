@@ -76,16 +76,19 @@ class mana {
             return `<img src=""  width="100px">`;
         return `<img src="/api/file/get?fid=${fid}" width="100px">`;
     }
-    static float(min, max) {
-        return new TempTextEdit_1.TempTextEdit((r) => {
-            let res = parseFloat(r);
-            if (isNaN(res))
-                throw Error("无效数字");
-            if (min != null && res < min)
-                throw Error("不能小于" + min);
-            if (max != null && res > max)
-                throw Error("不能大于" + max);
-            return res;
+    static float(min, max, notShowValue) {
+        return new TempTextEdit_1.TempTextEdit({
+            notShowValue: notShowValue,
+            validEdit: (r) => {
+                let res = parseFloat(r);
+                if (isNaN(res))
+                    throw Error("无效数字");
+                if (min != null && res < min)
+                    throw Error("不能小于" + min);
+                if (max != null && res > max)
+                    throw Error("不能大于" + max);
+                return res;
+            }
         });
     }
     /**
@@ -95,12 +98,14 @@ class mana {
      * @returns {function(any=): any}
      */
     static string(min, max) {
-        return new TempTextEdit_1.TempTextEdit((r) => {
-            if (min != null && r.length < min)
-                throw Error("字数不能小于" + min);
-            if (max != null && r.length > max)
-                throw Error("字数不能大于" + max);
-            return r;
+        return new TempTextEdit_1.TempTextEdit({
+            validEdit: (r) => {
+                if (min != null && r.length < min)
+                    throw Error("字数不能小于" + min);
+                if (max != null && r.length > max)
+                    throw Error("字数不能大于" + max);
+                return r;
+            }
         });
     }
     /**
@@ -119,15 +124,17 @@ class mana {
         });
     }
     static int(min, max) {
-        return new TempTextEdit_1.TempTextEdit((r) => {
-            let res = parseInt(r);
-            if (isNaN(res))
-                throw Error("无效数字");
-            if (min != null && res < min)
-                throw Error("不能小于" + min);
-            if (max != null && res > max)
-                throw Error("不能大于" + max);
-            return res;
+        return new TempTextEdit_1.TempTextEdit({
+            validEdit: (r) => {
+                let res = parseInt(r);
+                if (isNaN(res))
+                    throw Error("无效数字");
+                if (min != null && res < min)
+                    throw Error("不能小于" + min);
+                if (max != null && res > max)
+                    throw Error("不能大于" + max);
+                return res;
+            }
         });
     }
     /**
@@ -137,15 +144,17 @@ class mana {
      * @returns {function(any=): number}
      */
     static floatMul100(min, max) {
-        return new TempTextEdit_1.TempTextEdit((r) => {
-            let res = parseFloat(r);
-            if (isNaN(res))
-                throw Error("无效数字");
-            if (min != null && res < min)
-                throw Error("不能小于" + min);
-            if (max != null && res > max)
-                throw Error("不能大于" + max);
-            return Math.floor(res * 100);
+        return new TempTextEdit_1.TempTextEdit({
+            validEdit: (r) => {
+                let res = parseFloat(r);
+                if (isNaN(res))
+                    throw Error("无效数字");
+                if (min != null && res < min)
+                    throw Error("不能小于" + min);
+                if (max != null && res > max)
+                    throw Error("不能大于" + max);
+                return Math.floor(res * 100);
+            }
         });
     }
     /**
@@ -155,15 +164,17 @@ class mana {
      * @returns {function(any=): number}
      */
     static floatMul1000(min, max) {
-        return new TempTextEdit_1.TempTextEdit((r) => {
-            let res = parseFloat(r);
-            if (isNaN(res))
-                throw Error("无效数字");
-            if (min != null && res < min)
-                throw Error("不能小于" + min);
-            if (max != null && res > max)
-                throw Error("不能大于" + max);
-            return Math.floor(res * 1000);
+        return new TempTextEdit_1.TempTextEdit({
+            validEdit: (r) => {
+                let res = parseFloat(r);
+                if (isNaN(res))
+                    throw Error("无效数字");
+                if (min != null && res < min)
+                    throw Error("不能小于" + min);
+                if (max != null && res > max)
+                    throw Error("不能大于" + max);
+                return Math.floor(res * 1000);
+            }
         });
     }
 }

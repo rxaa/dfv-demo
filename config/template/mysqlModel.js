@@ -4,41 +4,32 @@ const fs = require("fs");
 const path = require("path");
 const dfv_1 = require("dfv/src/public/dfv");
 const db_1 = require("../../models/db");
-const dfv_2 = require("dfv");
 class mysqlModel {
     /**
      * 创建db class
      * @param tables
      */
     static dbClass(tables) {
-        let code = `
-import {MysqlConnecter} from "dfv/src/db/MysqlConnecter";
-import {SqlBuilder} from "dfv/src/db/SqlBuilder";
-import * as cfg from "../config/config";`;
+        let [codeStart, codeEnd] = mysqlModel.readFile(mysqlModel.dbClassName());
         for (let s of tables) {
-            code += `
-import {${s}} from "./${s}";`;
-        }
-        code += `
-        
-export const db = {
-    /**
-     * mysql连接
-     */
-    connecter: new MysqlConnecter(cfg.mysql),
-
-`;
-        for (let s of tables) {
-            code += `
+            codeStart += `
 
     /**
      *
      */
     ${s}: () => new SqlBuilder(${s}, db.connecter),`;
         }
-        code += `
-}`;
-        fs.writeFileSync(mysqlModel.dbClassName(), code);
+        fs.writeFileSync(mysqlModel.dbClassName(), codeStart + codeEnd);
+        [codeStart, codeEnd] = mysqlModel.readFile(mysqlModel.dbFrontClassName());
+        for (let s of tables) {
+            codeStart += `
+
+    /**
+     *
+     */
+    ${s}: () => new DbSession(${s}),`;
+        }
+        fs.writeFileSync(mysqlModel.dbFrontClassName(), codeStart + codeEnd);
     }
     /**
      * 创建表model
@@ -46,6 +37,10 @@ export const db = {
      * @param info
      */
     static tableClass(table, info) {
+        //如果文件以存在,则不创建
+        let fileName = path.join(mysqlModel.outMenu(), table + ".ts");
+        if (fs.existsSync(fileName))
+            return;
         let code = `
 import {sql} from "dfv/src/public/sql";
 
@@ -103,7 +98,26 @@ export class ${table} {
 
 
 }`;
-        fs.writeFileSync(path.join(mysqlModel.outMenu(), table + ".ts"), code);
+        fs.writeFileSync(fileName, code);
+    }
+    static readFile(path) {
+        let codeStart = "";
+        let codeEnd = "";
+        let src = fs.readFileSync(path).toString();
+        let state = 0;
+        dfv_1.dfv.readLine(src, line => {
+            if (state == 0)
+                codeStart += line + "\r\n";
+            if (state == 0 && line.indexOf(mysqlModel.codeStart) >= 0)
+                state = 1;
+            if (state == 1 && line.indexOf(mysqlModel.codeEnd) >= 0) {
+                state = 2;
+                codeEnd += "\r\n";
+            }
+            if (state == 2)
+                codeEnd += line + "\r\n";
+        });
+        return [codeStart, codeEnd];
     }
     static getTable(name) {
         return mysqlModel.cacheTableMap[name];
@@ -113,10 +127,8 @@ export class ${table} {
         // }
         // return null;
     }
-    static async generate(cover) {
-        if (!cover && fs.existsSync(mysqlModel.dbClassName()))
-            return;
-        await dfv_2.dfvFile.mkdirs(mysqlModel.outMenu());
+    static async generate() {
+        //await dfvFile.mkdirs(mysqlModel.outMenu())
         let tables = [];
         let data = await db_1.db.connecter.queryPromise("show TABLE status");
         for (let u of data) {
@@ -129,8 +141,11 @@ export class ${table} {
         }
     }
 }
-mysqlModel.outMenu = () => path.join(dfv_1.dfv.root, "runtime", "models");
+mysqlModel.outMenu = () => path.join(dfv_1.dfv.root, "models");
 mysqlModel.dbClassName = () => path.join(mysqlModel.outMenu(), "db.ts");
+mysqlModel.dbFrontClassName = () => path.join(mysqlModel.outMenu(), "dbFront.ts");
+mysqlModel.codeStart = "//auto generate start//";
+mysqlModel.codeEnd = "//auto generate end//";
 mysqlModel.cacheTableMap = {
 // ts_goods_pic: "gid",
 };
